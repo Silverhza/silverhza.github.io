@@ -1,8 +1,8 @@
 ---
-name: Vega-lite plots in Jekyll, Multiple Ways
+name: Homework 10
 tools: [Python, HTML, vega-lite]
-image: assets/pngs/cars.png
-description: Ways to get vega-lite plots in our webpages.
+image: assets/pngs/hw10.png
+description: vega-lite plots with interactions.
 custom_js:
   - vega.min
   - vega-lite.min
