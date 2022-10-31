@@ -10,9 +10,9 @@ custom_js:
   - justcharts
 ---
 
-# Homework 10
-#### By Zian He & Junsong Yao 
-  
+# <center>Homework 10</center>
+##### <center>Zian He & Junsong Yao</center>
+<center>2022/10/30</center>  
   
 #### Fig 1
 <vegachart schema-url="{{ site.baseurl }}/assets/json/visualization1.json" style="width: 100%"></vegachart>
@@ -21,7 +21,7 @@ custom_js:
 
 #### Write-Up
 
-Example comes from this [great blog post right here](https://blog.4dcu.be/programming/2021/05/03/Interactive-Visualizations.html) that was also used in [our test import script](https://github.com/UIUC-iSchool-DataViz/is445_bcubcg_fall2022/blob/main/week01/test_imports_week01.ipynb).
+For the second visualization, we created a heatmap plot and a barplot and merged them together. The interactive option was added so that we can get the frequency of the wind speed in the heatmap by selecting the pressure of each state in the heatmap. We chose to use a color gradient from yellow to blue, because it reflects the contrast in the size of the pressures. We did not do any transformation of the data because we thought that the existing variables of the data were enough to support the visualization we wanted. We used a similar visualization as in homework 9. However, to fit the Vega lite template, we chose to add the schema content to the original code and leave the rest unchanged.
 
 <!-- these are written in a combo of html and liquid --> 
 
