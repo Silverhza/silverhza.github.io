@@ -10,14 +10,18 @@ custom_js:
   - justcharts
 ---
 
+# Homework 10
+#### By Zian He & Junsong Yao 
+  
+  
+#### Fig 1
+<vegachart schema-url="{{ site.baseurl }}/assets/json/visualization1.json" style="width: 100%"></vegachart>
+#### Fig 2
+<vegachart schema-url="{{ site.baseurl }}/assets/json/visualization2.json" style="width: 100%"></vegachart>
 
-# Example Vega-lite Specs, Multiple Ways to Include
+#### Write-Up
 
-
-
-<vegachart schema-url="{{ site.baseurl }}/assets/json/fromvegaeditor.json" style="width: 100%"></vegachart>
-
-<vegachart schema-url="{{ site.baseurl }}/assets/json/interactivefromvegaeditor.json" style="width: 100%"></vegachart>
+Example comes from this [great blog post right here](https://blog.4dcu.be/programming/2021/05/03/Interactive-Visualizations.html) that was also used in [our test import script](https://github.com/UIUC-iSchool-DataViz/is445_bcubcg_fall2022/blob/main/week01/test_imports_week01.ipynb).
 
 <!-- these are written in a combo of html and liquid --> 
 
