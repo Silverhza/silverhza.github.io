@@ -1,0 +1,11 @@
+name: example-environment
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - openpyxl
+  - bqplot=0.12.30
+  - seaborn
+  - ipywidgets
+  - pandas
