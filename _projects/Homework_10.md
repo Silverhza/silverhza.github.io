@@ -34,6 +34,6 @@ custom_js:
 </div>
 
 <div class="right">
-{% include elements/button.html link="https://github.com/Silverhza/silverhza.github.io/blob/main/source/Assignment%2010.ipynb" text="The Analysis" %}
+{% include elements/button.html link="https://github.com/Silverhza/silverhza.github.io/blob/main/python_notebooks/Assignment%2010.ipynb" text="The Analysis" %}
 </div>
 
