@@ -2,7 +2,7 @@
 name: Final Project, Part 3.1
 tools: [Python, HTML, Altair]
 image: assets/pngs/final.png
-description: Draft final project by group 50.
+description: draft final project by group 50.
 custom_js:
   - vega.min
   - vega-lite.min
