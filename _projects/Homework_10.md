@@ -2,7 +2,7 @@
 name: Homework 10
 tools: [Python, HTML, vega-lite]
 image: assets/pngs/hw10.png
-description: vega-lite plots with interactions.
+description: Vega-lite plots with interactions.
 custom_js:
   - vega.min
   - vega-lite.min
