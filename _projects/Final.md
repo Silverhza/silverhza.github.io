@@ -21,9 +21,22 @@ custom_js:
 <br/>  
 
 #### Write-Up
-<!-- * For the first visualization, we chose to use a heat map to visualize the number of records of alien occurrences and the size of the moon phases in each state. We chose to use a blue to yellow gradient to represent the contrast in the size of the moon phases. We did not transform the data because we thought the raw data would be sufficient for the visualization of the graph we wanted. We used a similar visualization method as in Assignment 9. However, to accommodate the Vega lite template, we chose to add the pattern content to the original code and leave the rest unchanged.
+* Dashboard Describe:  
+  We created a visualization of the average number of wards of different types of crime objects for each day of the week in this city. As well as the distribution of the time of occurrence of different crime objects for each day of the week. We first created a heatmap with the x-axis of the visualization being the three types of crime objects (Person, Property, Society) and the y-axis being each day of the week. The color of the heatmap then represents the difference in the average number of victims. We link this heatmap to a bar chart. This allows us to see the number of different crime times occurring at that average ward number by selecting a different average ward number. This dashboard allows the layperson to understand the average number of wards, or victims, for each day of the week,what type of crimes these victims were subjected to, as well as the distribution of when these crimes occurred.
 
-* For the second visualization, we created a heatmap plot and a barplot and merged them together. The interactive option was added so that we can get the frequency of the wind speed in the heatmap by selecting the pressure of each state in the heatmap. We chose to use a color gradient from yellow to blue, because it reflects the contrast in the size of the pressures. We did not do any transformation of the data because we thought that the existing variables of the data were enough to support the visualization we wanted. We used a similar visualization as in homework 9. However, to fit the Vega lite template, we chose to add the schema content to the original code and leave the rest unchanged. -->
+* Contextual Datasets:  
+  Police Arrests Upload Datasets: https://data.illinois.gov/dataset/1d18ecc0-3c7e-4507-b8cc-7a5e30359d44/resource/ca1dceb3-01f8-4a56-935b-7e3035ff60a4/download/police-arrests-upload_20191226.csv  
+  The contextual data we found were police arrest data for Urbana. This data has the same clear documentation of crimes in Urbana as the City of Rockford crime records that we used. And we found some very interesting elements on this data, such as the age, gender, and race of the arrestees. We think these variables can help us to analyze and predict the motives and trends of crime by combining or comparing the two data visualizations.
+
+<br/>  
+ 
+<center><vegachart schema-url="{{ site.baseurl }}/assets/json/contextual1.json" style="width: 100%"></vegachart></center>
+
+<br/>  
+
+<center><vegachart schema-url="{{ site.baseurl }}/assets/json/contextual2.json" style="width: 100%"></vegachart></center>
+
+<br/> 
 
 <!-- these are written in a combo of html and liquid --> 
 
