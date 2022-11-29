@@ -10,14 +10,20 @@ custom_js:
   - justcharts
 ---
 
-# <center>Final Project (Part 3.1)</center>
+![avatar](https://rockfordil.gov/wp-content/themes/rockford/assets/images/General/Rockford_Logo.png)
+
+# <center>Urban Crime Visualization</center>
 
 <br/>
 
 ##### <center>Zian He & Junsong Yao</center>
 <center>2022/11/26</center>
 
-<br/>  
+<br/>
+
+![avatar](https://rockfordil.gov/wp-content/uploads/2016/08/cityscape_website_retouched.jpg)
+
+<br/>
 
 #### <center>Background</center>  
   A city's crime rate is always an important consideration in whether the city is a good place to live. And a city's crime data can also reflect many characteristics of the city. So, we want to analyze the crime data of Rockford city to get some visualization that will help us understand the crime situation of the city. We are also looking for crime reports for the city of Urbana to use as contextual data for our dashboard, and we hope to get some correlations in crime characteristics across cities from contextual visualization.  
@@ -54,6 +60,10 @@ custom_js:
 
 #### <center>Conclusion</center> 
   By visualizing the dashboard and three graphs, we found that the most frequent crimes in the city are crimes against property and occur most often on Mondays and Fridays. Crimes against individuals are concentrated on Saturdays and Sundays, while crimes against society are more evenly distributed. The age of the offenders is between 20 and 25, with whites being the most numerous, followed by blacks. We believe that through these visualization graphs we can effectively analyze and predict the crime trends in the city.
+
+<br/> 
+
+![avatar](https://illinois.edu/assets/img/branding/wordmark_horizontal.png)
 
 <br/> 
 
