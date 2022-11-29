@@ -86,9 +86,11 @@ custom_js:
 </div>
 
 <br/>
+<br/> 
 
-![avatar](https://illinois.edu/assets/img/branding/wordmark_vertical_alt.png)
+<img src="https://marketing.illinois.edu/wp-content/uploads/2021/09/wordmark.png" width="250" />
 
+<br/>
 <br/> 
 
 <!-- these are written in a combo of html and liquid --> 
