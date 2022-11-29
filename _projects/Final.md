@@ -66,6 +66,13 @@ custom_js:
 
 <br/> 
 
+#### <center>Citation</center> 
+* City of Rockford Crime Offenses 2011-Present - City of Rockford Crime Offenses 2011-Present - data.illinois.gov. (n.d.). [https://data.illinois.gov/dataset/116city_of_rockford_crime_offenses_2011present/resource/b23aa1b9-c0e0-4779-ba7a-6ca8b7b1df1c](https://data.illinois.gov/dataset/116city_of_rockford_crime_offenses_2011present/resource/b23aa1b9-c0e0-4779-ba7a-6ca8b7b1df1c)
+* WIFR Newsroom. (2022, August 26). Rockford crime stats: Violent crimes down slightly, auto thefts rise. https://www.wifr.com. [https://www.wifr.com/2022/08/26/rockford-crime-stats-violent-crimes-down-slightly-auto-thefts-rise/](https://www.wifr.com/2022/08/26/rockford-crime-stats-violent-crimes-down-slightly-auto-thefts-rise/)
+* Urbana Police Arrests - data.illinois.gov. (n.d.). [https://data.illinois.gov/dataset/police-arrests](https://data.illinois.gov/dataset/police-arrests)
+
+<br/> 
+
 ![avatar](https://illinois.edu/assets/img/branding/wordmark_vertical_alt.png)
 
 <br/> 
