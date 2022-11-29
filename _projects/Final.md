@@ -10,7 +10,7 @@ custom_js:
   - justcharts
 ---
 
-![avatar](https://rockfordil.gov/wp-content/themes/rockford/assets/images/General/Rockford_Logo.png)
+![avatar](https://rockfordil.gov/wp-content/themes/rockford/assets/images/General/cor_logo_color.png)
 
 # <center>Urban Crime Visualization</center>
 
@@ -42,8 +42,11 @@ custom_js:
 
 #### <center>Contextual Visualization</center>
   Police Arrests Upload Datasets: [Datasets Link](https://data.illinois.gov/dataset/1d18ecc0-3c7e-4507-b8cc-7a5e30359d44/resource/ca1dceb3-01f8-4a56-935b-7e3035ff60a4/download/police-arrests-upload_20191226.csv).  
-  The contextual data we found were police arrest data for Urbana. This data has the same clear documentation of crimes in Urbana as the City of Rockford crime records that we used. And we found some very interesting elements in this data, such as the age, gender, and race of the arrestees. We think these variables can help us to analyze and predict the motives and trends of crime by combining or comparing the two data visualizations.  
-  Because the entire police arrest data volume is very large, we chose to just use a data volume of 1000. Next, we created three contextual visualizations(Fig 2&3). The first graph is a histogram with the x-axis representing the age of the arrestees and the y-axis representing the number of arrestees of each age. And we categorized the race of the arrestees by color into Asian, Black, White, Hispanic, and Unknown. We can see the number of arrestees by looking at the length of each color in the bar. As you can see from this graph, the 20-25 age group has the highest number of arrests. White has the highest number of arrests in this age group. The second graph is a point chart. The x-axis represents the reason why the offender was arrested. The y-axis represents the method of the arrest. We have also divided each point into different ethnic groups by color. We find that on-view is the most common type of arrest, while warrant arrest is the most serious and least common type of arrest. The third bar graph visualizes the number of arrests per race. The x-axis represents the number of arrests, and the y-axis represents the race of arrests. we find that white people are the most numerous.
+
+  The contextual data we found were police arrest data for Urbana. This data has the same clear documentation of crimes in Urbana as the City of Rockford crime records that we used. And we found some very interesting elements in this data, such as the age, gender, and race of the arrestees. We think these variables can help us to analyze and predict the motives and trends of crime by combining or comparing the two data visualizations.    
+
+  Because the entire police arrest data volume is very large, we chose to just use a data volume of 1000. Next, we created three contextual visualizations(Fig 2&3). The first graph is a histogram with the x-axis representing the age of the arrestees and the y-axis representing the number of arrestees of each age. And we categorized the race of the arrestees by color into Asian, Black, White, Hispanic, and Unknown. We can see the number of arrestees by looking at the length of each color in the bar. As you can see from this graph, the 20-25 age group has the highest number of arrests. White has the highest number of arrests in this age group. The second and third graphs of our second dashboard. the point plots above, the x-axis represents the reason the offender was arrested. the y-axis represents the method of the arrest. We have also divided each point into different racial groups by color. The bar chart below visualizes the number of arrests for each race. The x-axis represents the number of arrests and the y-axis represents the race of arrests. We can select the point in the dot plot by swiping the area with the mouse to see how the number of arrests for each race changes in comparison. We find that on-view arrests are the most common type of arrest, while warrant arrests are the least common type of arrest. We also find that the more serious arrests, such as warrant arrest or detention, have more blacks in them. The less severe types of arrests, such as summons, have more whites.
+
 
 
 <br/>  
@@ -59,11 +62,11 @@ custom_js:
 <br/> 
 
 #### <center>Conclusion</center> 
-  By visualizing the dashboard and three graphs, we found that the most frequent crimes in the city are crimes against property and occur most often on Mondays and Fridays. Crimes against individuals are concentrated on Saturdays and Sundays, while crimes against society are more evenly distributed. The age of the offenders is between 20 and 25, with whites being the most numerous, followed by blacks. We believe that through these visualization graphs we can effectively analyze and predict the crime trends in the city.
+  By visualizing the two dashboards and a graph, we found that the most frequent crimes in the city are crimes against property and occur most often on Mondays and Fridays. Crimes against individuals are concentrated on Saturdays and Sundays, while crimes against society are more evenly distributed. The age of the offenders is between 20 and 25, with whites being the most numerous, followed by blacks. And blacks were more often arrested for felonies, while whites were more often arrested for misdemeanors. We believe that through these visualization graphs we can effectively analyze and predict the crime trends in the city.
 
 <br/> 
 
-![avatar](https://illinois.edu/assets/img/branding/wordmark_horizontal.png)
+![avatar](https://illinois.edu/assets/img/branding/wordmark_vertical_alt.png)
 
 <br/> 
 
