@@ -17,6 +17,7 @@ custom_js:
 <br/>
 
 ##### <center>Zian He & Junsong Yao</center>
+
 <center>2022/11/26</center>
 
 <br/>
@@ -72,6 +73,19 @@ custom_js:
 * Urbana Police Arrests - data.illinois.gov. (n.d.). [https://data.illinois.gov/dataset/police-arrests](https://data.illinois.gov/dataset/police-arrests)
 
 <br/> 
+
+<div style="display: flex; justify-content:space-between;">
+            <figure style="text-align:center; flex:1;">
+                <img src="https://canvas.illinois.edu/images/thumbnails/5684633/OjnIrFLUCbnwolwdaR1MbMWFB5B5QcMrKnee1kce" width="140px"/>
+                <figcaption styles="text-align: center;">Zian He</figcaption>
+            </figure>
+            <figure style="text-align:center; flex:1;">
+                <img src="https://canvas.illinois.edu/images/thumbnails/5594604/AtlWd77Xpw71Vxr3kl0odAeqj4xVAQkB18QlpUot" width="140px"/>
+                <figcaption styles="text-align: center;">Junsong Yao</figcaption>
+            </figure>
+</div>
+
+<br/>
 
 ![avatar](https://illinois.edu/assets/img/branding/wordmark_vertical_alt.png)
 
