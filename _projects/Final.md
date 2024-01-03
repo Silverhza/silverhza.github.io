@@ -10,7 +10,6 @@ custom_js:
   - justcharts
 ---
 
-![avatar](https://rockfordil.gov/wp-content/themes/rockford/assets/images/General/cor_logo_color.png)
 
 # <center>Urban Crime Visualization</center>
 
@@ -21,8 +20,6 @@ custom_js:
 <center>2022/11/26</center>
 
 <br/>
-
-![avatar](https://rockfordil.gov/wp-content/uploads/2016/08/cityscape_website_retouched.jpg)
 
 <br/>
 
