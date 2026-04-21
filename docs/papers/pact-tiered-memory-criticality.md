@@ -1,5 +1,5 @@
 ---
-title: PACT: A Criticality-First Design for Tiered Memory
+title: "PACT: A Criticality-First Design for Tiered Memory"
 authors: Hamid Hadian, Jinshu Liu, Hanchen Xu, Hansen Idden, Huaicheng Li
 year: 2026
 venue: ASPLOS 2026
@@ -11,6 +11,7 @@ tags:
   - operating systems
 status: published
 ---
+
 # PACT: A Criticality-First Design for Tiered Memory
 
 > [论文链接](https://doi.org/10.1145/3779212.3790198)
