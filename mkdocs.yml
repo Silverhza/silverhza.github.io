@@ -3,9 +3,7 @@ site_description: 科研论文总结、知识点卡片与专题梳理
 site_url: https://silverhza.github.io
 repo_name: Silverhza/silverhza.github.io
 repo_url: https://github.com/Silverhza/silverhza.github.io
-edit_uri: edit/main/content/
-docs_dir: content
-site_dir: docs
+edit_uri: edit/main/docs/
 
 theme:
   name: material
