@@ -1,4 +1,3 @@
-# Flower Research Notes (GitHub Pages)
+# Flower Research Notes
 
-- `main` 分支：Markdown 源文件（`docs/`）与 `mkdocs.yml`
-- `gh-pages` 分支：构建后的静态站点产物
+科研笔记整理归档
