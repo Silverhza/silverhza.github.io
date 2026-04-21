@@ -1,0 +1,3803 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="科研论文总结、知识点卡片与专题梳理">
+      
+      
+      
+        <link rel="canonical" href="https://silverhza.github.io/notes/gem5/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../../topics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>gem5手册 - Flower Research Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue-grey">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gem5" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Flower Research Notes" class="md-header__button md-logo" aria-label="Flower Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Flower Research Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              gem5手册
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue-grey"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="blue-grey"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Silverhza/silverhza.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Silverhza/silverhza.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../papers/" class="md-tabs__link">
+          
+  
+  
+  论文总结
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  知识点卡片
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../topics/" class="md-tabs__link">
+          
+  
+  
+  专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../content-conventions/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  内容规范
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Flower Research Notes" class="md-nav__button md-logo" aria-label="Flower Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Flower Research Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Silverhza/silverhza.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Silverhza/silverhza.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文总结
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文总结
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/pact-tiered-memory-criticality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PACT：以性能关键性为核心的分层内存设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/space-control-cxl-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Space-Control：CXL 共享解耦内存中的进程级隔离
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/aiore-cxl-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AIORE：CXL Memory 安全支持
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--published"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识点卡片
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    知识点卡片
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识点卡片
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    gem5手册
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    gem5手册
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 先说结论：新手应该怎么学 gem5
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. gem5 到底是什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ubuntu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Ubuntu 上准备环境
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Ubuntu 上准备环境">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 安装依赖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 这些包是干什么的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 检查版本
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 拉取源码并进入目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 第一次编译 gem5
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 第一次编译 gem5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 推荐命令
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 这条命令是什么意思
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 成功标志
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 三种常见 gem5 二进制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 三种常见 gem5 二进制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gem5debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gem5.debug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gem5opt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gem5.opt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gem5fast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gem5.fast
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 常见编译问题与处理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 常见编译问题与处理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-gcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 GCC 太旧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Python 找错
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-protobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 protobuf 报错
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-m4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 缺 m4
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-gem5-demo-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 第一个能跑的 gem5：官方 Demo Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 第一个能跑的 gem5：官方 Demo Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 这段代码在做什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 你会看到什么输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-warning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 warning 正不正常
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 第二个能跑的 gem5：自己搭一个最小系统
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 这份最小配置脚本怎么理解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 这份最小配置脚本怎么理解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-system-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 system = System()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 时钟域
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 内存模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 CPU 模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 总线与端口连接
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-x86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 x86 中断控制器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 工作负载
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-m5out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 跑完后必须学会看 m5out
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-configini" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. config.ini 为什么最重要
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. config.ini 为什么最重要">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推荐检查命令
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一个典型误区
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-statstxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. stats.txt 怎么看
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. stats.txt 怎么看">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        如果你加了 cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 使用 gem5 自带默认脚本：快，但别盲信
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. 使用 gem5 自带默认脚本：快，但别盲信">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timing-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        改成 timing CPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        加 L1 cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证 cache 真的存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-l1-l2-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. 自己加 L1 / L2 cache
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. 自己加 L1 / L2 cache">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141-cachespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 新建 caches.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 新建带 cache 的脚本
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 运行后检查 cache 是否真的存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-simobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 学会写最小 SimObject
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 学会写最小 SimObject">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 建目录
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-python-helloobjectpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Python 侧声明：HelloObject.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-hello_objecthh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 头文件：hello_object.hh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-hello_objectcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 源文件：hello_object.cc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#155-sconscript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 SConscript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#156" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 重新编译
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#157" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.7 写一个测试脚本实例化它
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-debug-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. 正确的调试方式：debug flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. 正确的调试方式：debug flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161-debug-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 给对象加 debug flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 新手建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-gem5-while" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. 理解事件驱动：gem5 不是 while 循环模拟器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. 理解事件驱动：gem5 不是 while 循环模拟器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 你需要知道的最小结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-simobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. 给 SimObject 加参数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="18. 给 SimObject 加参数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#181-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.1 Python 侧加参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.2 在配置脚本里赋值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.3 为什么这很重要
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-port-packet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. 内存对象：你必须理解 port 和 packet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-simple-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. simple cache 怎么学
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-ruby-slicc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21. Ruby / SLICC：新手怎么入门才不会炸
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21. Ruby / SLICC：新手怎么入门才不会炸">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#211-ruby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 Ruby 是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-slicc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 SLICC 是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213-ruby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 为什么新手不要一上来就学 Ruby
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#214" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 正确入门方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-gem5-101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22. gem5 101 应该怎么用
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22. gem5 101 应该怎么用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        我的建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23. 你现在应该会的事情（实操检查单）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24. 我给你的建议：下一步最值得做什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24. 我给你的建议：下一步最值得做什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        路线 A：先把基础跑熟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        路线 B：开始改模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-ruby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        路线 C：准备进阶到 Ruby
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. 总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    专题
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    专题
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    专题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../content-conventions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    内容规范
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 先说结论：新手应该怎么学 gem5
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. gem5 到底是什么
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ubuntu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Ubuntu 上准备环境
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Ubuntu 上准备环境">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 安装依赖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 这些包是干什么的
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 检查版本
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 拉取源码并进入目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 第一次编译 gem5
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 第一次编译 gem5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 推荐命令
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 这条命令是什么意思
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 成功标志
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 三种常见 gem5 二进制
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 三种常见 gem5 二进制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gem5debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gem5.debug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gem5opt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gem5.opt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gem5fast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gem5.fast
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 常见编译问题与处理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 常见编译问题与处理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-gcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 GCC 太旧
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Python 找错
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-protobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 protobuf 报错
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-m4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 缺 m4
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-gem5-demo-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 第一个能跑的 gem5：官方 Demo Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 第一个能跑的 gem5：官方 Demo Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 这段代码在做什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 你会看到什么输出
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-warning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 warning 正不正常
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 第二个能跑的 gem5：自己搭一个最小系统
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 这份最小配置脚本怎么理解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 这份最小配置脚本怎么理解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-system-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 system = System()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 时钟域
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 内存模式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 CPU 模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 总线与端口连接
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-x86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 x86 中断控制器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 工作负载
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-m5out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 跑完后必须学会看 m5out
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-configini" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. config.ini 为什么最重要
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. config.ini 为什么最重要">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        推荐检查命令
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一个典型误区
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-statstxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. stats.txt 怎么看
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. stats.txt 怎么看">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        如果你加了 cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-gem5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 使用 gem5 自带默认脚本：快，但别盲信
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. 使用 gem5 自带默认脚本：快，但别盲信">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timing-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        改成 timing CPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        加 L1 cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证 cache 真的存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-l1-l2-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. 自己加 L1 / L2 cache
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. 自己加 L1 / L2 cache">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141-cachespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 新建 caches.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 新建带 cache 的脚本
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 运行后检查 cache 是否真的存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-simobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 学会写最小 SimObject
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 学会写最小 SimObject">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 建目录
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152-python-helloobjectpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Python 侧声明：HelloObject.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153-hello_objecthh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 头文件：hello_object.hh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154-hello_objectcc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 源文件：hello_object.cc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#155-sconscript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 SConscript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#156" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 重新编译
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#157" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.7 写一个测试脚本实例化它
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-debug-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. 正确的调试方式：debug flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. 正确的调试方式：debug flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161-debug-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 给对象加 debug flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 新手建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-gem5-while" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. 理解事件驱动：gem5 不是 while 循环模拟器
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. 理解事件驱动：gem5 不是 while 循环模拟器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 你需要知道的最小结论
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-simobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. 给 SimObject 加参数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="18. 给 SimObject 加参数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#181-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.1 Python 侧加参数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.2 在配置脚本里赋值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.3 为什么这很重要
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-port-packet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. 内存对象：你必须理解 port 和 packet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-simple-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. simple cache 怎么学
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-ruby-slicc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21. Ruby / SLICC：新手怎么入门才不会炸
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="21. Ruby / SLICC：新手怎么入门才不会炸">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#211-ruby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.1 Ruby 是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-slicc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.2 SLICC 是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213-ruby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.3 为什么新手不要一上来就学 Ruby
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#214" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21.4 正确入门方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-gem5-101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22. gem5 101 应该怎么用
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="22. gem5 101 应该怎么用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        我的建议
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23. 你现在应该会的事情（实操检查单）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24. 我给你的建议：下一步最值得做什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="24. 我给你的建议：下一步最值得做什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        路线 A：先把基础跑熟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        路线 B：开始改模型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-ruby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        路线 C：准备进阶到 Ruby
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. 总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/Silverhza/silverhza.github.io/edit/main/content/notes/gem5/index.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="gem5">gem5手册<a class="headerlink" href="#gem5" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>面向 <strong>完全没接触过 gem5</strong> 的读者。目标不是“知道 gem5 是什么”，而是 <strong>能在自己机器上把它编译出来、跑起来、看懂输出、改配置、加缓存、写一个最小 SimObject、会用调试输出、理解事件驱动，并知道 Ruby/SLICC 该怎么入门</strong>。<br />
+参考来源：gem5 官方 <em>Learning gem5</em> 教程与对应 Markdown 源文件。<br />
+官方文档入口：<a href="https://www.gem5.org/documentation/learning_gem5/introduction/">https://www.gem5.org/documentation/learning_gem5/introduction/</a><br />
+官方仓库：<a href="https://github.com/gem5/gem5">https://github.com/gem5/gem5</a></p>
+</blockquote>
+<hr />
+<h2 id="0-gem5">0. 先说结论：新手应该怎么学 gem5<a class="headerlink" href="#0-gem5" title="Permanent link">&para;</a></h2>
+<p>如果你第一次接触 gem5，不要一上来就冲 Ruby、协议状态机、全系统启动。更合理的顺序是：</p>
+<ol>
+<li><strong>先把 gem5 编译成功</strong></li>
+<li><strong>先跑通一个最小例子</strong></li>
+<li><strong>学会看 <code>m5out/config.ini</code> 和 <code>m5out/stats.txt</code></strong></li>
+<li><strong>理解 Python 配置脚本到底在干什么</strong></li>
+<li><strong>自己加 L1/L2 cache</strong></li>
+<li><strong>写一个最小自定义 SimObject</strong></li>
+<li><strong>学 debug flags、事件、参数传递</strong></li>
+<li><strong>再去碰 memory object / simple cache</strong></li>
+<li><strong>最后再看 Ruby / SLICC</strong></li>
+</ol>
+<p>如果你现在目标是“看完以后就会用”，那最重要的是两件事：</p>
+<ul>
+<li><strong>每一步都要有能直接复制运行的命令</strong></li>
+<li><strong>每次运行之后都要知道该看什么文件、什么输出才算成功</strong></li>
+</ul>
+<hr />
+<h2 id="1-gem5">1. gem5 到底是什么<a class="headerlink" href="#1-gem5" title="Permanent link">&para;</a></h2>
+<p>gem5 本质上是一个：</p>
+<ul>
+<li><strong>模块化</strong></li>
+<li><strong>离散事件驱动</strong></li>
+<li><strong>可扩展</strong></li>
+<li><strong>面向计算机体系结构研究</strong></li>
+</ul>
+<p>的模拟平台。</p>
+<p>它最常见的工作流不是 GUI，而是：</p>
+<ul>
+<li>用 <strong>Python 配置脚本</strong> 组装系统</li>
+<li>用 <strong>C++</strong> 扩展模型</li>
+<li>用 <strong>SLICC</strong> 写 Ruby 一致性协议</li>
+<li>运行 gem5</li>
+<li>看 <code>config.ini</code>、<code>stats.txt</code>、debug 输出</li>
+<li>修改，再跑，再分析</li>
+</ul>
+<p>你可以粗略把 gem5 分成三层：</p>
+<ul>
+<li><strong>Python</strong>：描述“我要模拟一台什么机器”</li>
+<li><strong>C++</strong>：描述“机器内部组件如何工作”</li>
+<li><strong>SLICC</strong>：描述“Ruby 协议状态机如何工作”</li>
+</ul>
+<hr />
+<h2 id="2-ubuntu">2. Ubuntu 上准备环境<a class="headerlink" href="#2-ubuntu" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 安装依赖<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p>推荐直接执行：</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>build-essential<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>git<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>m4<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>scons<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>zlib1g<span class="w"> </span>zlib1g-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libprotobuf-dev<span class="w"> </span>protobuf-compiler<span class="w"> </span>libprotoc-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libgoogle-perftools-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python3<span class="w"> </span>python3-dev
+</code></pre></div>
+<h3 id="22">2.2 这些包是干什么的<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>build-essential</code>：GCC/G++ 等编译环境</li>
+<li><code>git</code>：拉 gem5 源码</li>
+<li><code>m4</code>：部分构建流程会用到</li>
+<li><code>scons</code>：gem5 的主构建工具</li>
+<li><code>zlib1g-dev</code>：压缩相关依赖</li>
+<li><code>protobuf-*</code>：trace / protobuf 支持</li>
+<li><code>python3-dev</code>：嵌入式 Python 构建所需</li>
+</ul>
+<h3 id="23">2.3 检查版本<a class="headerlink" href="#23" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>gcc<span class="w"> </span>--version
+g++<span class="w"> </span>--version
+python3<span class="w"> </span>--version
+scons<span class="w"> </span>--version
+</code></pre></div>
+<p>建议至少满足：</p>
+<ul>
+<li>GCC：10+</li>
+<li>Python：3.6+</li>
+<li>SCons：3.0+</li>
+</ul>
+<hr />
+<h2 id="3">3. 拉取源码并进入目录<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/gem5/gem5
+<span class="nb">cd</span><span class="w"> </span>gem5
+</code></pre></div>
+<p>你现在最需要认识的目录：</p>
+<ul>
+<li><code>SConstruct</code>：SCons 构建入口</li>
+<li><code>configs/</code>：配置脚本</li>
+<li><code>src/</code>：gem5 源码</li>
+<li><code>build/</code>：编译输出目录</li>
+<li><code>tests/</code>：测试程序</li>
+<li><code>build_opts/</code>：预定义构建选项</li>
+</ul>
+<hr />
+<h2 id="4-gem5">4. 第一次编译 gem5<a class="headerlink" href="#4-gem5" title="Permanent link">&para;</a></h2>
+<h3 id="41">4.1 推荐命令<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span><span class="sb">`</span>which<span class="w"> </span>scons<span class="sb">`</span><span class="w"> </span>build/ALL/gem5.opt<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</code></pre></div>
+<p>如果你机器配置一般，也可以：</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span><span class="sb">`</span>which<span class="w"> </span>scons<span class="sb">`</span><span class="w"> </span>build/ALL/gem5.opt<span class="w"> </span>-j8
+</code></pre></div>
+<h3 id="42">4.2 这条命令是什么意思<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>python3 \</code>which scons``：明确用 Python 3 调用 SCons</li>
+<li><code>build/ALL/gem5.opt</code>：构建目标</li>
+<li><code>ALL</code>：包含所有 ISA，通常也方便后续实验</li>
+<li><code>gem5.opt</code>：优化版，保留调试符号，日常最常用</li>
+<li><code>-j...</code>：并行编译线程数</li>
+</ul>
+<h3 id="43">4.3 成功标志<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<p>编译成功后，重点看：</p>
+<div class="highlight"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>build/ALL/gem5.opt
+</code></pre></div>
+<p>如果文件存在，说明成功。</p>
+<p>你也会在终端里看到类似：</p>
+<div class="highlight"><pre><span></span><code>[    LINK]  -&gt; ALL/gem5.opt
+scons: done building targets.
+</code></pre></div>
+<hr />
+<h2 id="5-gem5">5. 三种常见 gem5 二进制<a class="headerlink" href="#5-gem5" title="Permanent link">&para;</a></h2>
+<h3 id="gem5debug"><code>gem5.debug</code><a class="headerlink" href="#gem5debug" title="Permanent link">&para;</a></h3>
+<ul>
+<li>无优化</li>
+<li>调试最方便</li>
+<li>很慢</li>
+</ul>
+<h3 id="gem5opt"><code>gem5.opt</code><a class="headerlink" href="#gem5opt" title="Permanent link">&para;</a></h3>
+<ul>
+<li>开启优化</li>
+<li>保留调试符号</li>
+<li><strong>最推荐日常使用</strong></li>
+</ul>
+<h3 id="gem5fast"><code>gem5.fast</code><a class="headerlink" href="#gem5fast" title="Permanent link">&para;</a></h3>
+<ul>
+<li>性能最好</li>
+<li>调试最差</li>
+<li>适合模型稳定以后跑大量实验</li>
+</ul>
+<p><strong>新手默认使用 <code>gem5.opt</code>。</strong></p>
+<hr />
+<h2 id="6">6. 常见编译问题与处理<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h3 id="61-gcc">6.1 GCC 太旧<a class="headerlink" href="#61-gcc" title="Permanent link">&para;</a></h3>
+<p>检查：</p>
+<div class="highlight"><pre><span></span><code>g++<span class="w"> </span>--version
+</code></pre></div>
+<p>如果版本太旧，就升级系统编译器。</p>
+<hr />
+<h3 id="62-python">6.2 Python 找错<a class="headerlink" href="#62-python" title="Permanent link">&para;</a></h3>
+<p>建议始终用：</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span><span class="sb">`</span>which<span class="w"> </span>scons<span class="sb">`</span><span class="w"> </span>build/ALL/gem5.opt<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</code></pre></div>
+<p>不要偷懒直接 <code>scons ...</code>，否则环境不一致时会出问题。</p>
+<hr />
+<h3 id="63-protobuf">6.3 protobuf 报错<a class="headerlink" href="#63-protobuf" title="Permanent link">&para;</a></h3>
+<p>先清理后重编：</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span><span class="sb">`</span>which<span class="w"> </span>scons<span class="sb">`</span><span class="w"> </span>--clean
+rm<span class="w"> </span>-rf<span class="w"> </span>build/
+python3<span class="w"> </span><span class="sb">`</span>which<span class="w"> </span>scons<span class="sb">`</span><span class="w"> </span>build/ALL/gem5.opt<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</code></pre></div>
+<hr />
+<h3 id="64-m4">6.4 缺 <code>m4</code><a class="headerlink" href="#64-m4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>m4
+</code></pre></div>
+<hr />
+<h2 id="7-gem5-demo-board">7. 第一个能跑的 gem5：官方 Demo Board<a class="headerlink" href="#7-gem5-demo-board" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>这一步的目标是：<strong>确认你的 gem5 能跑起来</strong>。</p>
+</blockquote>
+<p>创建脚本：</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>configs/tutorial/part1
+cat<span class="w"> </span>&gt;<span class="w"> </span>configs/tutorial/part1/simple.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">from gem5.prebuilt.demo.x86_demo_board import X86DemoBoard</span>
+<span class="s">from gem5.resources.resource import obtain_resource</span>
+<span class="s">from gem5.simulate.simulator import Simulator</span>
+
+<span class="s">board = X86DemoBoard()</span>
+
+<span class="s">board.set_workload(</span>
+<span class="s">    obtain_resource(&quot;x86-ubuntu-24.04-boot-no-systemd&quot;)</span>
+<span class="s">)</span>
+
+<span class="s">sim = Simulator(board)</span>
+<span class="s">sim.run(20_000_000_000)  # 20 billion ticks = 20 ms</span>
+<span class="s">PY</span>
+</code></pre></div>
+<p>运行：</p>
+<div class="highlight"><pre><span></span><code>./build/ALL/gem5.opt<span class="w"> </span>configs/tutorial/part1/simple.py
+</code></pre></div>
+<h3 id="71">7.1 这段代码在做什么<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>X86DemoBoard()</code>：创建一台预置好的 x86 demo 系统</li>
+<li><code>obtain_resource(...)</code>：下载 workload 所需资源</li>
+<li><code>Simulator(board)</code>：创建模拟器</li>
+<li><code>sim.run(...)</code>：运行指定 tick 数</li>
+</ul>
+<h3 id="72">7.2 你会看到什么输出<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
+<p>典型输出里会有：</p>
+<div class="highlight"><pre><span></span><code>gem5 Simulator System.
+...
+info: Entering event queue @ 0. Starting simulation...
+</code></pre></div>
+<h3 id="73-warning">7.3 warning 正不正常<a class="headerlink" href="#73-warning" title="Permanent link">&para;</a></h3>
+<p>非常正常。比如：</p>
+<ul>
+<li>demo board 只是演示用途</li>
+<li>某些 DRAM 容量 warning</li>
+<li>某些 x86 指令 warning</li>
+<li>legacy stat warning</li>
+</ul>
+<p>先学会分辨：</p>
+<ul>
+<li><code>warn:</code>：通常还能继续</li>
+<li><code>fatal:</code> / <code>panic:</code>：必须处理</li>
+</ul>
+<hr />
+<h2 id="8-gem5">8. 第二个能跑的 gem5：自己搭一个最小系统<a class="headerlink" href="#8-gem5" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>这是最关键的入门步骤。你必须理解：<strong>gem5 的本质是用 Python 配置脚本拼装 SimObject。</strong></p>
+</blockquote>
+<p>创建最小脚本：</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>configs/tutorial/part1/simple_classic.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">import m5</span>
+<span class="s">from m5.objects import *</span>
+
+<span class="s">system = System()</span>
+
+<span class="s"># 时钟域</span>
+<span class="s">system.clk_domain = SrcClockDomain()</span>
+<span class="s">system.clk_domain.clock = &#39;1GHz&#39;</span>
+<span class="s">system.clk_domain.voltage_domain = VoltageDomain()</span>
+
+<span class="s"># 内存模式与地址空间</span>
+<span class="s">system.mem_mode = &#39;timing&#39;</span>
+<span class="s">system.mem_ranges = [AddrRange(&#39;512MB&#39;)]</span>
+
+<span class="s"># CPU</span>
+<span class="s">system.cpu = X86TimingSimpleCPU()</span>
+
+<span class="s"># 系统总线</span>
+<span class="s">system.membus = SystemXBar()</span>
+
+<span class="s"># CPU 连接到总线</span>
+<span class="s">system.cpu.icache_port = system.membus.cpu_side_ports</span>
+<span class="s">system.cpu.dcache_port = system.membus.cpu_side_ports</span>
+
+<span class="s"># x86 中断控制器</span>
+<span class="s">system.cpu.createInterruptController()</span>
+<span class="s">system.cpu.interrupts[0].pio = system.membus.mem_side_ports</span>
+<span class="s">system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports</span>
+<span class="s">system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports</span>
+
+<span class="s"># 内存控制器</span>
+<span class="s">system.mem_ctrl = DDR3_1600_8x8()</span>
+<span class="s">system.mem_ctrl.range = system.mem_ranges[0]</span>
+<span class="s">system.mem_ctrl.port = system.membus.mem_side_ports</span>
+
+<span class="s"># system port</span>
+<span class="s">system.system_port = system.membus.cpu_side_ports</span>
+
+<span class="s"># 工作负载</span>
+<span class="s">process = Process()</span>
+<span class="s">process.cmd = [&#39;tests/test-progs/hello/bin/x86/linux/hello&#39;]</span>
+<span class="s">system.cpu.workload = process</span>
+<span class="s">system.cpu.createThreads()</span>
+
+<span class="s">root = Root(full_system=False, system=system)</span>
+<span class="s">m5.instantiate()</span>
+
+<span class="s">print(&#39;Beginning simulation!&#39;)</span>
+<span class="s">exit_event = m5.simulate()</span>
+<span class="s">print(&#39;Exiting @ tick {} because {}&#39;.format(m5.curTick(), exit_event.getCause()))</span>
+<span class="s">PY</span>
+</code></pre></div>
+<p>运行：</p>
+<div class="highlight"><pre><span></span><code>./build/ALL/gem5.opt<span class="w"> </span>configs/tutorial/part1/simple_classic.py
+</code></pre></div>
+<hr />
+<h2 id="9">9. 这份最小配置脚本怎么理解<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<h3 id="91-system-system">9.1 <code>system = System()</code><a class="headerlink" href="#91-system-system" title="Permanent link">&para;</a></h3>
+<p>这是整台模拟机器的根对象。</p>
+<hr />
+<h3 id="92">9.2 时钟域<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">system</span><span class="o">.</span><span class="n">clk_domain</span> <span class="o">=</span> <span class="n">SrcClockDomain</span><span class="p">()</span>
+<span class="n">system</span><span class="o">.</span><span class="n">clk_domain</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="s1">&#39;1GHz&#39;</span>
+<span class="n">system</span><span class="o">.</span><span class="n">clk_domain</span><span class="o">.</span><span class="n">voltage_domain</span> <span class="o">=</span> <span class="n">VoltageDomain</span><span class="p">()</span>
+</code></pre></div>
+<p>表示：</p>
+<ul>
+<li>系统时钟 1GHz</li>
+<li>使用默认电压域</li>
+</ul>
+<hr />
+<h3 id="93">9.3 内存模式<a class="headerlink" href="#93" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">system</span><span class="o">.</span><span class="n">mem_mode</span> <span class="o">=</span> <span class="s1">&#39;timing&#39;</span>
+</code></pre></div>
+<p>常见模式：</p>
+<ul>
+<li><code>timing</code>：考虑时序，做实验最常用</li>
+<li><code>atomic</code>：更快，但不是严肃 timing 实验模式</li>
+<li><code>functional</code>：功能访问，不考虑时序</li>
+</ul>
+<p><strong>新手请优先用 <code>timing</code>。</strong></p>
+<hr />
+<h3 id="94-cpu">9.4 CPU 模型<a class="headerlink" href="#94-cpu" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">system</span><span class="o">.</span><span class="n">cpu</span> <span class="o">=</span> <span class="n">X86TimingSimpleCPU</span><span class="p">()</span>
+</code></pre></div>
+<p>这表示：</p>
+<ul>
+<li>ISA：x86</li>
+<li>CPU 模型：TimingSimpleCPU</li>
+</ul>
+<p>推荐理解顺序：</p>
+<ul>
+<li><code>TimingSimpleCPU</code>：最适合入门</li>
+<li><code>MinorCPU</code>：适合学习流水线</li>
+<li><code>O3CPU</code>：适合做更复杂微结构研究</li>
+</ul>
+<hr />
+<h3 id="95">9.5 总线与端口连接<a class="headerlink" href="#95" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">system</span><span class="o">.</span><span class="n">membus</span> <span class="o">=</span> <span class="n">SystemXBar</span><span class="p">()</span>
+<span class="n">system</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">icache_port</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">membus</span><span class="o">.</span><span class="n">cpu_side_ports</span>
+<span class="n">system</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">dcache_port</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">membus</span><span class="o">.</span><span class="n">cpu_side_ports</span>
+</code></pre></div>
+<p>意思是：</p>
+<ul>
+<li>建一个系统总线</li>
+<li>CPU 的 I/D 端口都接到这条总线上</li>
+</ul>
+<p>这里还没有显式 cache，所以它是最简系统。</p>
+<hr />
+<h3 id="96-x86">9.6 x86 中断控制器<a class="headerlink" href="#96-x86" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">system</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">createInterruptController</span><span class="p">()</span>
+</code></pre></div>
+<p>x86 配置里这一段很常见，后面 ARM / RISC-V 的写法不一定一样。</p>
+<p>结论：<strong>不同 ISA 的配置不能只换一个 binary 就完事。</strong></p>
+<hr />
+<h3 id="97">9.7 工作负载<a class="headerlink" href="#97" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">process</span> <span class="o">=</span> <span class="n">Process</span><span class="p">()</span>
+<span class="n">process</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tests/test-progs/hello/bin/x86/linux/hello&#39;</span><span class="p">]</span>
+</code></pre></div>
+<p>这表示 SE 模式下跑一个 hello 程序。</p>
+<hr />
+<h2 id="10-m5out">10. 跑完后必须学会看 <code>m5out</code><a class="headerlink" href="#10-m5out" title="Permanent link">&para;</a></h2>
+<p>默认输出目录是：</p>
+<div class="highlight"><pre><span></span><code>m5out/
+</code></pre></div>
+<p>重点文件：</p>
+<ul>
+<li><code>m5out/config.ini</code></li>
+<li><code>m5out/config.json</code></li>
+<li><code>m5out/stats.txt</code></li>
+</ul>
+<p>你必须养成习惯：</p>
+<div class="highlight"><pre><span></span><code>less<span class="w"> </span>m5out/config.ini
+less<span class="w"> </span>m5out/stats.txt
+</code></pre></div>
+<hr />
+<h2 id="11-configini">11. <code>config.ini</code> 为什么最重要<a class="headerlink" href="#11-configini" title="Permanent link">&para;</a></h2>
+<p><code>config.ini</code> 是 <strong>最终实际被实例化出来的系统配置快照</strong>。</p>
+<p>也就是说：</p>
+<blockquote>
+<p>你“以为脚本写了什么”不重要，真正生效了什么，以 <code>config.ini</code> 为准。</p>
+</blockquote>
+<h3 id="_1">推荐检查命令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;type=&quot;</span><span class="w"> </span>m5out/config.ini<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;cpu&quot;</span><span class="w"> </span>m5out/config.ini<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;clock&quot;</span><span class="w"> </span>m5out/config.ini<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;cache&quot;</span><span class="w"> </span>m5out/config.ini<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+</code></pre></div>
+<h3 id="_2">一个典型误区<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>你以为自己设置了 cache size：</p>
+<div class="highlight"><pre><span></span><code>--l1d_size<span class="o">=</span>64kB
+</code></pre></div>
+<p>但如果脚本根本没创建 cache，这个参数可能完全没起作用。</p>
+<p>所以一定要看 <code>config.ini</code>。</p>
+<hr />
+<h2 id="12-statstxt">12. <code>stats.txt</code> 怎么看<a class="headerlink" href="#12-statstxt" title="Permanent link">&para;</a></h2>
+<p>先看这些全局统计：</p>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;simTicks|simInsts|hostSeconds|hostInstRate&quot;</span><span class="w"> </span>m5out/stats.txt
+</code></pre></div>
+<p>常见字段：</p>
+<ul>
+<li><code>simTicks</code>：模拟经过的 tick</li>
+<li><code>simInsts</code>：提交的指令数</li>
+<li><code>hostSeconds</code>：宿主机真实运行时间</li>
+<li><code>hostInstRate</code>：宿主机每秒模拟多少指令</li>
+</ul>
+<h3 id="cache">如果你加了 cache<a class="headerlink" href="#cache" title="Permanent link">&para;</a></h3>
+<p>可以搜 miss/hit：</p>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s2">&quot;cache.*miss|cache.*hit&quot;</span><span class="w"> </span>m5out/stats.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+</code></pre></div>
+<hr />
+<h2 id="13-gem5">13. 使用 gem5 自带默认脚本：快，但别盲信<a class="headerlink" href="#13-gem5" title="Permanent link">&para;</a></h2>
+<p>经典写法：</p>
+<div class="highlight"><pre><span></span><code>build/X86/gem5.opt<span class="w"> </span>configs/example/se.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cmd<span class="o">=</span>tests/test-progs/hello/bin/x86/linux/hello
+</code></pre></div>
+<h3 id="timing-cpu">改成 timing CPU<a class="headerlink" href="#timing-cpu" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>build/X86/gem5.opt<span class="w"> </span>configs/example/se.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cmd<span class="o">=</span>tests/test-progs/hello/bin/x86/linux/hello<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cpu-type<span class="o">=</span>TimingSimpleCPU
+</code></pre></div>
+<h3 id="l1-cache">加 L1 cache<a class="headerlink" href="#l1-cache" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>build/X86/gem5.opt<span class="w"> </span>configs/example/se.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cmd<span class="o">=</span>tests/test-progs/hello/bin/x86/linux/hello<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cpu-type<span class="o">=</span>TimingSimpleCPU<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--caches<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--l1d_size<span class="o">=</span>64kB<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--l1i_size<span class="o">=</span>16kB
+</code></pre></div>
+<h3 id="cache_1">验证 cache 真的存在<a class="headerlink" href="#cache_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;dcache&quot;</span><span class="w"> </span>m5out/config.ini<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;icache&quot;</span><span class="w"> </span>m5out/config.ini<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+</code></pre></div>
+<p>如果看到对应对象，才算真的建出来。</p>
+<hr />
+<h2 id="14-l1-l2-cache">14. 自己加 L1 / L2 cache<a class="headerlink" href="#14-l1-l2-cache" title="Permanent link">&para;</a></h2>
+<h3 id="141-cachespy">14.1 新建 <code>caches.py</code><a class="headerlink" href="#141-cachespy" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>configs/tutorial/part1/caches.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">from m5.objects import Cache</span>
+
+<span class="s">class L1Cache(Cache):</span>
+<span class="s">    assoc = 2</span>
+<span class="s">    tag_latency = 2</span>
+<span class="s">    data_latency = 2</span>
+<span class="s">    response_latency = 2</span>
+<span class="s">    mshrs = 4</span>
+<span class="s">    tgts_per_mshr = 20</span>
+
+<span class="s">    def connectCPU(self, cpu):</span>
+<span class="s">        raise NotImplementedError</span>
+
+<span class="s">    def connectBus(self, bus):</span>
+<span class="s">        self.mem_side = bus.cpu_side_ports</span>
+
+<span class="s">class L1ICache(L1Cache):</span>
+<span class="s">    size = &#39;16kB&#39;</span>
+<span class="s">    def connectCPU(self, cpu):</span>
+<span class="s">        self.cpu_side = cpu.icache_port</span>
+
+<span class="s">class L1DCache(L1Cache):</span>
+<span class="s">    size = &#39;64kB&#39;</span>
+<span class="s">    def connectCPU(self, cpu):</span>
+<span class="s">        self.cpu_side = cpu.dcache_port</span>
+
+<span class="s">class L2Cache(Cache):</span>
+<span class="s">    size = &#39;256kB&#39;</span>
+<span class="s">    assoc = 8</span>
+<span class="s">    tag_latency = 20</span>
+<span class="s">    data_latency = 20</span>
+<span class="s">    response_latency = 20</span>
+<span class="s">    mshrs = 20</span>
+<span class="s">    tgts_per_mshr = 12</span>
+
+<span class="s">    def connectCPUSideBus(self, bus):</span>
+<span class="s">        self.cpu_side = bus.mem_side_ports</span>
+
+<span class="s">    def connectMemSideBus(self, bus):</span>
+<span class="s">        self.mem_side = bus.cpu_side_ports</span>
+<span class="s">PY</span>
+</code></pre></div>
+<h3 id="142-cache">14.2 新建带 cache 的脚本<a class="headerlink" href="#142-cache" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>configs/tutorial/part1/simple_cache.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">import m5</span>
+<span class="s">from m5.objects import *</span>
+<span class="s">from caches import L1ICache, L1DCache, L2Cache</span>
+
+<span class="s">system = System()</span>
+<span class="s">system.clk_domain = SrcClockDomain()</span>
+<span class="s">system.clk_domain.clock = &#39;1GHz&#39;</span>
+<span class="s">system.clk_domain.voltage_domain = VoltageDomain()</span>
+
+<span class="s">system.mem_mode = &#39;timing&#39;</span>
+<span class="s">system.mem_ranges = [AddrRange(&#39;512MB&#39;)]</span>
+
+<span class="s">system.cpu = X86TimingSimpleCPU()</span>
+
+<span class="s">system.l1i = L1ICache()</span>
+<span class="s">system.l1d = L1DCache()</span>
+<span class="s">system.l2bus = L2XBar()</span>
+<span class="s">system.l2cache = L2Cache()</span>
+<span class="s">system.membus = SystemXBar()</span>
+
+<span class="s">system.l1i.connectCPU(system.cpu)</span>
+<span class="s">system.l1d.connectCPU(system.cpu)</span>
+
+<span class="s">system.l1i.connectBus(system.l2bus)</span>
+<span class="s">system.l1d.connectBus(system.l2bus)</span>
+
+<span class="s">system.l2cache.connectCPUSideBus(system.l2bus)</span>
+<span class="s">system.l2cache.connectMemSideBus(system.membus)</span>
+
+<span class="s">system.cpu.createInterruptController()</span>
+<span class="s">system.cpu.interrupts[0].pio = system.membus.mem_side_ports</span>
+<span class="s">system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports</span>
+<span class="s">system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports</span>
+
+<span class="s">system.mem_ctrl = DDR3_1600_8x8()</span>
+<span class="s">system.mem_ctrl.range = system.mem_ranges[0]</span>
+<span class="s">system.mem_ctrl.port = system.membus.mem_side_ports</span>
+
+<span class="s">system.system_port = system.membus.cpu_side_ports</span>
+
+<span class="s">process = Process()</span>
+<span class="s">process.cmd = [&#39;tests/test-progs/hello/bin/x86/linux/hello&#39;]</span>
+<span class="s">system.cpu.workload = process</span>
+<span class="s">system.cpu.createThreads()</span>
+
+<span class="s">root = Root(full_system=False, system=system)</span>
+<span class="s">m5.instantiate()</span>
+
+<span class="s">print(&#39;Beginning simulation!&#39;)</span>
+<span class="s">exit_event = m5.simulate()</span>
+<span class="s">print(&#39;Exiting @ tick {} because {}&#39;.format(m5.curTick(), exit_event.getCause()))</span>
+<span class="s">PY</span>
+</code></pre></div>
+<p>运行：</p>
+<div class="highlight"><pre><span></span><code>./build/ALL/gem5.opt<span class="w"> </span>configs/tutorial/part1/simple_cache.py
+</code></pre></div>
+<h3 id="143-cache">14.3 运行后检查 cache 是否真的存在<a class="headerlink" href="#143-cache" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;\[system.l1i\]&quot;</span><span class="w"> </span>m5out/config.ini
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;\[system.l1d\]&quot;</span><span class="w"> </span>m5out/config.ini
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;\[system.l2cache\]&quot;</span><span class="w"> </span>m5out/config.ini
+</code></pre></div>
+<hr />
+<h2 id="15-simobject">15. 学会写最小 SimObject<a class="headerlink" href="#15-simobject" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>这是从“会跑 gem5”走向“会改 gem5”的第一步。</p>
+</blockquote>
+<h3 id="151">15.1 建目录<a class="headerlink" href="#151" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>src/learning_gem5/part2
+</code></pre></div>
+<h3 id="152-python-helloobjectpy">15.2 Python 侧声明：<code>HelloObject.py</code><a class="headerlink" href="#152-python-helloobjectpy" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>src/learning_gem5/part2/HelloObject.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">from m5.params import *</span>
+<span class="s">from m5.SimObject import SimObject</span>
+
+<span class="s">class HelloObject(SimObject):</span>
+<span class="s">    type = &#39;HelloObject&#39;</span>
+<span class="s">    cxx_header = &#39;learning_gem5/part2/hello_object.hh&#39;</span>
+<span class="s">PY</span>
+</code></pre></div>
+<h3 id="153-hello_objecthh">15.3 头文件：<code>hello_object.hh</code><a class="headerlink" href="#153-hello_objecthh" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>src/learning_gem5/part2/hello_object.hh<span class="w"> </span><span class="s">&lt;&lt;&#39;CPP&#39;</span>
+<span class="s">#ifndef __LEARNING_GEM5_HELLO_OBJECT_HH__</span>
+<span class="s">#define __LEARNING_GEM5_HELLO_OBJECT_HH__</span>
+
+<span class="s">#include &quot;params/HelloObject.hh&quot;</span>
+<span class="s">#include &quot;sim/sim_object.hh&quot;</span>
+
+<span class="s">namespace gem5</span>
+<span class="s">{</span>
+
+<span class="s">class HelloObject : public SimObject</span>
+<span class="s">{</span>
+<span class="s">  public:</span>
+<span class="s">    HelloObject(const HelloObjectParams &amp;p);</span>
+<span class="s">    void startup() override;</span>
+<span class="s">};</span>
+
+<span class="s">} // namespace gem5</span>
+
+<span class="s">#endif</span>
+<span class="s">CPP</span>
+</code></pre></div>
+<h3 id="154-hello_objectcc">15.4 源文件：<code>hello_object.cc</code><a class="headerlink" href="#154-hello_objectcc" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>src/learning_gem5/part2/hello_object.cc<span class="w"> </span><span class="s">&lt;&lt;&#39;CPP&#39;</span>
+<span class="s">#include &quot;learning_gem5/part2/hello_object.hh&quot;</span>
+
+<span class="s">#include &lt;iostream&gt;</span>
+
+<span class="s">namespace gem5</span>
+<span class="s">{</span>
+
+<span class="s">HelloObject::HelloObject(const HelloObjectParams &amp;p)</span>
+<span class="s">    : SimObject(p)</span>
+<span class="s">{</span>
+<span class="s">    std::cout &lt;&lt; &quot;HelloObject created!&quot; &lt;&lt; std::endl;</span>
+<span class="s">}</span>
+
+<span class="s">void</span>
+<span class="s">HelloObject::startup()</span>
+<span class="s">{</span>
+<span class="s">    std::cout &lt;&lt; &quot;HelloObject startup() called!&quot; &lt;&lt; std::endl;</span>
+<span class="s">}</span>
+
+<span class="s">} // namespace gem5</span>
+<span class="s">CPP</span>
+</code></pre></div>
+<h3 id="155-sconscript">15.5 SConscript<a class="headerlink" href="#155-sconscript" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>src/learning_gem5/part2/SConscript<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">Import(&#39;*&#39;)</span>
+
+<span class="s">SimObject(&#39;HelloObject.py&#39;, sim_objects=[&#39;HelloObject&#39;])</span>
+<span class="s">Source(&#39;hello_object.cc&#39;)</span>
+<span class="s">PY</span>
+</code></pre></div>
+<h3 id="156">15.6 重新编译<a class="headerlink" href="#156" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span><span class="sb">`</span>which<span class="w"> </span>scons<span class="sb">`</span><span class="w"> </span>build/ALL/gem5.opt<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</code></pre></div>
+<h3 id="157">15.7 写一个测试脚本实例化它<a class="headerlink" href="#157" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>configs/tutorial/part2/hello_test.py<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<span class="s">import m5</span>
+<span class="s">from m5.objects import *</span>
+<span class="s">from m5.objects.HelloObject import HelloObject</span>
+
+<span class="s">root = Root(full_system=False)</span>
+<span class="s">root.hello = HelloObject()</span>
+
+<span class="s">m5.instantiate()</span>
+<span class="s">print(&#39;Instantiated&#39;)</span>
+<span class="s">m5.simulate(1)</span>
+<span class="s">PY</span>
+</code></pre></div>
+<p>运行：</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>configs/tutorial/part2
+./build/ALL/gem5.opt<span class="w"> </span>configs/tutorial/part2/hello_test.py
+</code></pre></div>
+<p>如果成功，你应该能看到类似：</p>
+<div class="highlight"><pre><span></span><code>HelloObject created!
+HelloObject startup() called!
+</code></pre></div>
+<hr />
+<h2 id="16-debug-flags">16. 正确的调试方式：debug flags<a class="headerlink" href="#16-debug-flags" title="Permanent link">&para;</a></h2>
+<p>不要到处 <code>printf</code>。gem5 推荐用 debug flags。</p>
+<h3 id="161-debug-flag">16.1 给对象加 debug flag<a class="headerlink" href="#161-debug-flag" title="Permanent link">&para;</a></h3>
+<p>这部分官方示例更完整，但你先记住使用方式：</p>
+<p>运行时加：</p>
+<div class="highlight"><pre><span></span><code>./build/ALL/gem5.opt<span class="w"> </span>--debug-flags<span class="o">=</span>HelloObject<span class="w"> </span>configs/tutorial/part2/hello_test.py
+</code></pre></div>
+<p>如果你后面真的在 C++ 里接入了 debug flag，就可以只看该模块输出，而不是淹没在整个模拟器日志里。</p>
+<h3 id="162">16.2 新手建议<a class="headerlink" href="#162" title="Permanent link">&para;</a></h3>
+<ul>
+<li>普通验证：先用 <code>std::cout</code></li>
+<li>稍复杂调试：改用 debug flags</li>
+<li>大规模协议/内存系统调试：必须系统化使用 debug flags</li>
+</ul>
+<hr />
+<h2 id="17-gem5-while">17. 理解事件驱动：gem5 不是 while 循环模拟器<a class="headerlink" href="#17-gem5-while" title="Permanent link">&para;</a></h2>
+<p>gem5 的核心执行模型是：<strong>事件驱动</strong>。</p>
+<p>也就是说，很多事情不是“每拍都检查一次”，而是：</p>
+<ul>
+<li>现在注册一个事件</li>
+<li>未来某个 tick 到时再执行</li>
+</ul>
+<h3 id="171">17.1 你需要知道的最小结论<a class="headerlink" href="#171" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>startup()</code>：可用于模拟开始时注册事件</li>
+<li>组件的行为往往由 event queue 推动</li>
+<li>如果不理解事件，后面写 SimObject 和 memory object 会很痛苦</li>
+</ul>
+<p>所以：</p>
+<blockquote>
+<p><strong>gem5 的本质不是“顺序程序”，而是“时间轴上的事件系统”。</strong></p>
+</blockquote>
+<hr />
+<h2 id="18-simobject">18. 给 SimObject 加参数<a class="headerlink" href="#18-simobject" title="Permanent link">&para;</a></h2>
+<p>你后面很快就会需要让对象“可配置”，而不是写死。</p>
+<h3 id="181-python">18.1 Python 侧加参数<a class="headerlink" href="#181-python" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">m5.params</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">m5.SimObject</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimObject</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HelloObject</span><span class="p">(</span><span class="n">SimObject</span><span class="p">):</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;HelloObject&#39;</span>
+    <span class="n">cxx_header</span> <span class="o">=</span> <span class="s1">&#39;learning_gem5/part2/hello_object.hh&#39;</span>
+    <span class="n">time_to_wait</span> <span class="o">=</span> <span class="n">Param</span><span class="o">.</span><span class="n">Latency</span><span class="p">(</span><span class="s1">&#39;2ns&#39;</span><span class="p">,</span> <span class="s1">&#39;Time before firing event&#39;</span><span class="p">)</span>
+    <span class="n">number_of_fires</span> <span class="o">=</span> <span class="n">Param</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;How many times to print&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="182">18.2 在配置脚本里赋值<a class="headerlink" href="#182" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="o">.</span><span class="n">hello</span> <span class="o">=</span> <span class="n">HelloObject</span><span class="p">(</span><span class="n">time_to_wait</span><span class="o">=</span><span class="s1">&#39;5ns&#39;</span><span class="p">,</span> <span class="n">number_of_fires</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="183">18.3 为什么这很重要<a class="headerlink" href="#183" title="Permanent link">&para;</a></h3>
+<p>因为真正有研究价值的模型必须：</p>
+<ul>
+<li>可参数化</li>
+<li>可复现实验条件</li>
+<li>可批量 sweep 参数</li>
+</ul>
+<hr />
+<h2 id="19-port-packet">19. 内存对象：你必须理解 port 和 packet<a class="headerlink" href="#19-port-packet" title="Permanent link">&para;</a></h2>
+<p>进入 memory object 之前，先记最重要的概念：</p>
+<ul>
+<li><strong>cpu_side port</strong>：接上游请求</li>
+<li><strong>mem_side port</strong>：往下游发请求</li>
+<li><strong>timing 请求</strong>：最关键，做 timing 模拟要靠它</li>
+<li><strong>atomic 请求</strong>：更快，但不是严肃 timing</li>
+<li><strong>functional 请求</strong>：功能访问</li>
+</ul>
+<p>如果你后面去写：</p>
+<ul>
+<li>simple memory object</li>
+<li>simple cache</li>
+<li>自定义互连组件</li>
+</ul>
+<p>本质上都在做一件事：</p>
+<blockquote>
+<p><strong>处理 request / response packet 在不同 port 间的流动。</strong></p>
+</blockquote>
+<hr />
+<h2 id="20-simple-cache">20. simple cache 怎么学<a class="headerlink" href="#20-simple-cache" title="Permanent link">&para;</a></h2>
+<p>官方后续章节会带你写一个 very small cache。你应该按这个思路学：</p>
+<ol>
+<li>先看 Python 侧参数声明</li>
+<li>再看 C++ 里端口定义</li>
+<li>再看 hit / miss 逻辑</li>
+<li>最后看 timing response 如何返回</li>
+</ol>
+<p>如果你现在还没完全看懂，不要急。你先确保自己已经做到：</p>
+<ul>
+<li>会写普通配置脚本</li>
+<li>会写最小 SimObject</li>
+<li>知道事件和参数怎么用</li>
+</ul>
+<p>再去啃 simple cache，会轻松很多。</p>
+<hr />
+<h2 id="21-ruby-slicc">21. Ruby / SLICC：新手怎么入门才不会炸<a class="headerlink" href="#21-ruby-slicc" title="Permanent link">&para;</a></h2>
+<p>Ruby 是 gem5 里更高级的内存系统和一致性建模部分。</p>
+<h3 id="211-ruby">21.1 Ruby 是什么<a class="headerlink" href="#211-ruby" title="Permanent link">&para;</a></h3>
+<p>Ruby 提供：</p>
+<ul>
+<li>更细致的 cache/memory 建模</li>
+<li>一致性协议建模</li>
+<li>网络模型</li>
+</ul>
+<h3 id="212-slicc">21.2 SLICC 是什么<a class="headerlink" href="#212-slicc" title="Permanent link">&para;</a></h3>
+<p>SLICC 是一种描述协议状态机的语言，用来写：</p>
+<ul>
+<li>状态</li>
+<li>事件</li>
+<li>动作</li>
+<li>转移</li>
+</ul>
+<h3 id="213-ruby">21.3 为什么新手不要一上来就学 Ruby<a class="headerlink" href="#213-ruby" title="Permanent link">&para;</a></h3>
+<p>因为你会同时面对：</p>
+<ul>
+<li>协议语义</li>
+<li>状态机</li>
+<li>消息缓冲</li>
+<li>网络</li>
+<li>配置脚本</li>
+<li>调试 trace</li>
+</ul>
+<p>这非常容易直接劝退。</p>
+<h3 id="214">21.4 正确入门方式<a class="headerlink" href="#214" title="Permanent link">&para;</a></h3>
+<p>顺序建议：</p>
+<ol>
+<li>先读 Ruby introduction</li>
+<li>再读 MSI 教学协议</li>
+<li>再看状态机声明</li>
+<li>再看 actions</li>
+<li>再看 transitions</li>
+<li>最后再跑 simple Ruby system</li>
+</ol>
+<p>别反过来。</p>
+<hr />
+<h2 id="22-gem5-101">22. gem5 101 应该怎么用<a class="headerlink" href="#22-gem5-101" title="Permanent link">&para;</a></h2>
+<p><code>gem5 101</code> 更像课程作业，不是最适合零基础入门的主线。</p>
+<p>但它很适合你在掌握基础后拿来练手：</p>
+<ul>
+<li>Homework 1：跑平台、看 stats</li>
+<li>Homework 2：改 ISA 指令</li>
+<li>Homework 3：看流水线与功能单元</li>
+<li>Homework 4：分支 vs 条件移动</li>
+<li>Homework 5：cache replacement policy</li>
+<li>Homework 6：更偏并行/多核/GPU</li>
+</ul>
+<h3 id="_3">我的建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>如果你目标是“先会用 gem5”：</p>
+<ul>
+<li>先学本文前 20 节</li>
+<li>再拿 gem5 101 当练习题</li>
+</ul>
+<hr />
+<h2 id="23_1">23. 你现在应该会的事情（实操检查单）<a class="headerlink" href="#23_1" title="Permanent link">&para;</a></h2>
+<p>如果你已经做到了下面这些，说明你是真的入门了，不是“看懂了概念”：</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 能在 Ubuntu 上安装依赖并编译出 <code>build/ALL/gem5.opt</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 能运行官方 Demo Board 脚本</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 能写一个最小 classic 配置脚本</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 知道 <code>timing</code> 和 <code>atomic</code> 的区别</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 会看 <code>m5out/config.ini</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 会看 <code>m5out/stats.txt</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 会用 <code>configs/example/se.py</code> 跑 hello</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 知道为什么一定要检查 cache 是否真的建出来</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 能自己加 L1/L2 cache</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 能写一个最小 SimObject</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 知道参数是怎么从 Python 传到 C++ 的</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 知道 gem5 是事件驱动模拟器</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 知道 Ruby / SLICC 应该怎么开始学</li>
+</ul>
+<hr />
+<h2 id="24">24. 我给你的建议：下一步最值得做什么<a class="headerlink" href="#24" title="Permanent link">&para;</a></h2>
+<p>如果你现在真的想把 gem5 学会，而不是只停留在“知道它能干嘛”，下一步最值得做的是：</p>
+<h3 id="a">路线 A：先把基础跑熟<a class="headerlink" href="#a" title="Permanent link">&para;</a></h3>
+<p>按顺序完成：</p>
+<ol>
+<li><code>simple.py</code></li>
+<li><code>simple_classic.py</code></li>
+<li><code>simple_cache.py</code></li>
+<li>比较有/无 cache 时 <code>stats.txt</code> 的差异</li>
+</ol>
+<h3 id="b">路线 B：开始改模型<a class="headerlink" href="#b" title="Permanent link">&para;</a></h3>
+<p>按顺序完成：</p>
+<ol>
+<li>最小 <code>HelloObject</code></li>
+<li>给它加参数</li>
+<li>给它加事件</li>
+<li>给它加 debug 输出</li>
+</ol>
+<h3 id="c-ruby">路线 C：准备进阶到 Ruby<a class="headerlink" href="#c-ruby" title="Permanent link">&para;</a></h3>
+<p>前提是 A/B 都已经做过。</p>
+<hr />
+<h2 id="25">25. 总结<a class="headerlink" href="#25" title="Permanent link">&para;</a></h2>
+<p>gem5 最难的地方，不是安装和命令本身，而是：</p>
+<ul>
+<li>你到底在模拟什么</li>
+<li>参数到底有没有生效</li>
+<li>输出应该怎么看</li>
+<li>模型内部到底怎么跑</li>
+</ul>
+<p>所以正确的入门方式不是背命令，而是建立这个习惯：</p>
+<blockquote>
+<p><strong>写脚本 → 跑起来 → 看 <code>config.ini</code> → 看 <code>stats.txt</code> → 改参数 → 再验证</strong></p>
+</blockquote>
+<p>如果你能把本文里的步骤都亲手跑一遍，你就已经不算“不会 gem5”了。</p>
+<p>你会进入下一阶段：</p>
+<ul>
+<li>能自己搭实验平台</li>
+<li>能自己改简单模型</li>
+<li>能开始做真正有研究意义的实验</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.sections", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
