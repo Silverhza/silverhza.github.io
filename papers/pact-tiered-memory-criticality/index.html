@@ -1,0 +1,3044 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="科研论文总结、知识点卡片与专题梳理">
+      
+      
+      
+        <link rel="canonical" href="https://silverhza.github.io/papers/pact-tiered-memory-criticality/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../space-control-cxl-isolation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>PACT：以性能关键性为核心的分层内存设计 - Flower Research Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue-grey">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#status-published" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Flower Research Notes" class="md-header__button md-logo" aria-label="Flower Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Flower Research Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PACT：以性能关键性为核心的分层内存设计
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue-grey"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="blue-grey"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Silverhza/flower-research-notes" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Silverhza
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  论文总结
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../notes/" class="md-tabs__link">
+          
+  
+  
+  知识点卡片
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../topics/" class="md-tabs__link">
+          
+  
+  
+  专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../content-conventions/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  内容规范
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Flower Research Notes" class="md-nav__button md-logo" aria-label="Flower Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Flower Research Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Silverhza/flower-research-notes" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Silverhza
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文总结
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文总结
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PACT：以性能关键性为核心的分层内存设计
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PACT：以性能关键性为核心的分层内存设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-published" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        status: published
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pact-a-criticality-first-design-for-tiered-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PACT: A Criticality-First Design for Tiered Memory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PACT: A Criticality-First Design for Tiered Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文在解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景 / 为什么这个问题重要？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心思路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键机制 / 方法细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="关键机制 / 方法细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pacper-page-access-criticality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. PAC：Per-page Access Criticality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-missmiss-stall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 关键不是“有多少 miss”，而是“miss 的 stall 代价”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-profiling-4-cpu-counters-pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 在线 profiling：只用 4 个标准 CPU counters 做 PAC 估计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-soaralto-tmo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 相比 SoarAlto / TMO 一类工作的差异
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-pac-centric-migration-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. PAC-centric migration policy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. PAC-centric migration policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eager-demotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eager demotion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-promotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        adaptive promotion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验与结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文真正的贡献
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="这篇论文真正的贡献">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1hotness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 1：明确否定了“hotness 足够”的设计前提
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-criticality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 2：把 criticality 做成了在线、页级、可用于决策的指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-per-tier-stall-attribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 3：把 per-tier stall attribution 引入页迁移决策
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-criticality-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 4：证明 criticality-first 在工程上是可落地的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限与问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="局限与问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. PAC 仍然是模型，不是直接真值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 实验规模仍然属于研究原型级别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-stall-mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 实现依赖对 stall / MLP 的精细理解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 没有真正解决更高层对象语义问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        和相关工作的关系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="和相关工作的关系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hotness-based-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与传统 hotness-based tiering 相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soaralto-criticality-aware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 SoarAlto 一类 criticality-aware 工作相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stall-pressure-memory-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 stall-pressure / memory pressure 驱动方案相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对研究者的启发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="对研究者的启发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 1：指标必须和最终优化目标对齐
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2tiered-memory-stall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 2：tiered memory 不只是容量管理，更是 stall 管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3page-placement-mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 3：page placement 应该和 MLP 深度绑定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        我的评价
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        适合继续追的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#takeaway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Takeaway
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        论文核心PAC算法 完整详细拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="论文核心PAC算法 完整详细拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pac_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、PAC算法的核心定位与要解决的核心挑战
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、PAC算法的核心定位与要解决的核心挑战">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 核心定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 算法要解决的核心行业难题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 算法的核心设计目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、PAC算法成立的核心理论前提（论文关键洞察）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、PAC算法成立的核心理论前提（论文关键洞察）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察1：分层CPU停顿可通过极简公式精准建模
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2mlpcpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察2：分层MLP可通过通用CPU硬件计数器在线测量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察3：MLP具备强相位稳定性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察4：稳定窗口内，比例归因可精准实现页面级停顿拆解
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、PAC核心算法完整流程与伪代码解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、PAC核心算法完整流程与伪代码解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 算法整体框架
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 算法依赖的硬件计数器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 算法伪代码与逐行深度解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 算法伪代码与逐行深度解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第1行：低速层核心指标采集与MLP计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第2行：低速层总CPU停顿计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第3-5行：页面级访问数据采集与统计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第6-7行：单页面停顿比例归因
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第8行：PAC值的迭代更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、PAC算法的关键配套设计与参数优化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、PAC算法的关键配套设计与参数优化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 采样周期的选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 PAC值的跟踪与存储
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 跨平台适配设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、PAC算法的有效性验证（论文实验支撑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、PAC算法的局限性与未来优化方向
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、PAC算法的局限性与未来优化方向">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 当前核心局限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 未来优化方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../space-control-cxl-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Space-Control：CXL 共享解耦内存中的进程级隔离
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aiore-cxl-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AIORE：CXL Memory 安全支持
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--published"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识点卡片
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    知识点卡片
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识点卡片
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes/gem5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    gem5手册
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    专题
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    专题
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    专题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../content-conventions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    内容规范
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-published" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        status: published
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pact-a-criticality-first-design-for-tiered-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PACT: A Criticality-First Design for Tiered Memory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PACT: A Criticality-First Design for Tiered Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文在解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景 / 为什么这个问题重要？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心思路
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键机制 / 方法细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="关键机制 / 方法细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pacper-page-access-criticality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. PAC：Per-page Access Criticality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-missmiss-stall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 关键不是“有多少 miss”，而是“miss 的 stall 代价”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-profiling-4-cpu-counters-pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 在线 profiling：只用 4 个标准 CPU counters 做 PAC 估计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-soaralto-tmo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 相比 SoarAlto / TMO 一类工作的差异
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-pac-centric-migration-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. PAC-centric migration policy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. PAC-centric migration policy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eager-demotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eager demotion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-promotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        adaptive promotion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验与结果
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文真正的贡献
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="这篇论文真正的贡献">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1hotness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 1：明确否定了“hotness 足够”的设计前提
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-criticality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 2：把 criticality 做成了在线、页级、可用于决策的指标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-per-tier-stall-attribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 3：把 per-tier stall attribution 引入页迁移决策
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-criticality-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 4：证明 criticality-first 在工程上是可落地的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限与问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="局限与问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. PAC 仍然是模型，不是直接真值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 实验规模仍然属于研究原型级别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-stall-mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 实现依赖对 stall / MLP 的精细理解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 没有真正解决更高层对象语义问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        和相关工作的关系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="和相关工作的关系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hotness-based-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与传统 hotness-based tiering 相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soaralto-criticality-aware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 SoarAlto 一类 criticality-aware 工作相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stall-pressure-memory-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 stall-pressure / memory pressure 驱动方案相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对研究者的启发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="对研究者的启发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 1：指标必须和最终优化目标对齐
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2tiered-memory-stall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 2：tiered memory 不只是容量管理，更是 stall 管理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3page-placement-mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 3：page placement 应该和 MLP 深度绑定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        我的评价
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        适合继续追的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#takeaway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Takeaway
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        论文核心PAC算法 完整详细拆解
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="论文核心PAC算法 完整详细拆解">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pac_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、PAC算法的核心定位与要解决的核心挑战
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、PAC算法的核心定位与要解决的核心挑战">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 核心定义
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 算法要解决的核心行业难题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 算法的核心设计目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、PAC算法成立的核心理论前提（论文关键洞察）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、PAC算法成立的核心理论前提（论文关键洞察）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察1：分层CPU停顿可通过极简公式精准建模
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2mlpcpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察2：分层MLP可通过通用CPU硬件计数器在线测量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察3：MLP具备强相位稳定性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        洞察4：稳定窗口内，比例归因可精准实现页面级停顿拆解
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、PAC核心算法完整流程与伪代码解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、PAC核心算法完整流程与伪代码解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 算法整体框架
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 算法依赖的硬件计数器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 算法伪代码与逐行深度解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 算法伪代码与逐行深度解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第1行：低速层核心指标采集与MLP计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第2行：低速层总CPU停顿计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第3-5行：页面级访问数据采集与统计
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第6-7行：单页面停顿比例归因
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第8行：PAC值的迭代更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、PAC算法的关键配套设计与参数优化
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、PAC算法的关键配套设计与参数优化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 采样周期的选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-pac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 PAC值的跟踪与存储
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 跨平台适配设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、PAC算法的有效性验证（论文实验支撑）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pac_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、PAC算法的局限性与未来优化方向
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、PAC算法的局限性与未来优化方向">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 当前核心局限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 未来优化方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/Silverhza/flower-research-notes/edit/main/docs/papers/pact-tiered-memory-criticality.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<hr />
+<p>title: PACT: A Criticality-First Design for Tiered Memory
+authors: Hamid Hadian, Jinshu Liu, Hanchen Xu, Hansen Idden, Huaicheng Li
+year: 2026
+venue: ASPLOS 2026
+tags:</p>
+<ul>
+<li>tiered memory</li>
+<li>CXL</li>
+<li>page migration</li>
+<li>memory criticality</li>
+<li>operating systems</li>
+</ul>
+<h2 id="status-published">status: published<a class="headerlink" href="#status-published" title="Permanent link">&para;</a></h2>
+<h1 id="pact-a-criticality-first-design-for-tiered-memory">PACT: A Criticality-First Design for Tiered Memory<a class="headerlink" href="#pact-a-criticality-first-design-for-tiered-memory" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><a href="https://doi.org/10.1145/3779212.3790198">论文链接</a></p>
+</blockquote>
+<h2 id="_1">一句话总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>PACT 的核心观点很直接：<strong>分层内存中的页放置不能只看访问频率，而应该看这个页到底让 CPU 卡了多少时间。</strong> 为此，论文提出了 PAC（Per-page Access Criticality）这一在线页级性能关键性指标，并围绕它设计了一个 criticality-first 的 tiered memory 系统。</p>
+<h2 id="_2">这篇论文在解决什么问题？<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>这篇论文要解决的是分层内存系统里一个很常见、但一直没被真正解决好的问题：<strong>哪些页应该放在快内存（DRAM），哪些页可以留在慢内存（NUMA / PMem / CXL）？</strong></p>
+<p>现有方案大多依赖“热度”——也就是页访问频率、访问次数、访问新近性等指标。直觉上这似乎合理：访问更频繁的页就更应该放在快内存里。但论文指出，这其实是一个长期存在的错位假设：</p>
+<ul>
+<li>访问频繁，并不一定意味着这个页真的影响性能；</li>
+<li>有些页虽然访问次数不高，但一旦访问就会强烈拖慢 CPU；</li>
+<li>性能代价真正取决于访问模式、访存延迟、以及 memory-level parallelism（MLP）等因素，而不是频率本身。</li>
+</ul>
+<p>因此，PACT 想解决的不是“如何更准确地找热点页”，而是：</p>
+<p><strong>如何在线、页粒度地量化每个页对应用性能的真实影响，并据此决定 tiered memory 中的迁移和放置策略。</strong></p>
+<h2 id="_3">背景 / 为什么这个问题重要？<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>随着 DRAM 扩展变慢、工作负载越来越吃内存，数据中心里越来越多系统采用分层内存：</p>
+<ul>
+<li>快层是 DRAM；</li>
+<li>慢层可能是 NUMA 远端内存、持久内存，或者 CXL 扩展内存；</li>
+<li>CXL 又进一步推动了 memory disaggregation 和 memory pooling 的使用。</li>
+</ul>
+<p>但慢层内存通常要比 DRAM 慢很多。论文提到，CXL 访问延迟常常仍然有 <strong>2–3×</strong> 的差距。于是问题就变成：</p>
+<ul>
+<li>快内存容量有限；</li>
+<li>慢内存容量更大但延迟高；</li>
+<li>必须把“真正关键”的页放进 DRAM，才能保证性能。</li>
+</ul>
+<p>这件事如果只用 hotness 去做，常常会产生两个问题：</p>
+<ol>
+<li><strong>把高频但不关键的页放进 DRAM，浪费快内存空间；</strong></li>
+<li><strong>把真正会拖慢 CPU 的页留在慢层，导致 stall 时间居高不下。</strong></li>
+</ol>
+<p>论文认为，tiered memory 应该从“hotness-first”转向“criticality-first”，也就是从“谁访问多”转向“谁更伤性能”。</p>
+<h2 id="_4">核心思路<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>PACT 的核心设计可以概括成三层：</p>
+<ol>
+<li><strong>定义一个页粒度性能关键性指标：PAC</strong>；</li>
+<li><strong>在线估计每个页的 PAC，而不是离线分析</strong>；</li>
+<li><strong>让页迁移策略完全围绕 PAC 来设计，而不是围绕热度。</strong></li>
+</ol>
+<p>PACT 不是在现有 hotness-based 方案上“补一个 criticality hint”，而是把 criticality 上升为一等设计原则。论文认为，只有这样，分层内存的页迁移策略才真正和应用性能目标对齐。</p>
+<h2 id="_5">关键机制 / 方法细节<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="1-pacper-page-access-criticality">1. PAC：Per-page Access Criticality<a class="headerlink" href="#1-pacper-page-access-criticality" title="Permanent link">&para;</a></h3>
+<p>论文提出的 PAC，本质上是一个问题：</p>
+<p><strong>某个页上的访问，到底给 CPU 带来了多少 stall 成本？</strong></p>
+<p>这和 page hotness 的差别非常大。Hotness 只看“访问了多少次”，而 PAC 想衡量“这些访问是否真的阻塞了 CPU 的执行”。</p>
+<p>作者给出的洞察是：</p>
+<ul>
+<li>访问频率相同的两个页，可能性能影响完全不同；</li>
+<li>比如 pointer-chasing 场景下，访问串行、MLP 低，一个慢访问就可能直接暴露成 CPU stall；</li>
+<li>而数组流式访问虽然次数很多，但由于并行度高、预取充分，延迟可能被摊薄，对性能影响反而小得多。</li>
+</ul>
+<p>论文在动机实验里给出了很直观的结果：同样访问频率的页，stall cost 可以相差 <strong>4× 到 65×</strong>。这基本直接判了“频率 = 关键性”这个假设死刑。</p>
+<h3 id="2-missmiss-stall">2. 关键不是“有多少 miss”，而是“miss 的 stall 代价”<a class="headerlink" href="#2-missmiss-stall" title="Permanent link">&para;</a></h3>
+<p>PACT 并不是简单把 LLC miss 次数换个名字，而是明确引入了 <strong>per-tier stall modeling</strong>。</p>
+<p>作者发现，可以把 CPU stall 大致建模为：</p>
+<ul>
+<li>LLC miss 数量</li>
+<li>每层内存的访问延迟</li>
+<li>对应层次下的 MLP</li>
+</ul>
+<p>之间的组合关系。</p>
+<p>直觉上就是：</p>
+<ul>
+<li>miss 多，不一定糟；</li>
+<li>如果这些 miss 能并行发出去，单次 stall 会被摊薄；</li>
+<li>真正糟的是：慢层访问 + 低 MLP + 高暴露延迟。</li>
+</ul>
+<p>PACT 试图做的，就是把这部分 stall 成本归因到具体页上。</p>
+<h3 id="3-profiling-4-cpu-counters-pac">3. 在线 profiling：只用 4 个标准 CPU counters 做 PAC 估计<a class="headerlink" href="#3-profiling-4-cpu-counters-pac" title="Permanent link">&para;</a></h3>
+<p>这篇论文一个很强的地方在于，它不是停在概念上，而是给出了一个<strong>无需额外硬件修改</strong>的在线估计方法。</p>
+<p>作者声称：</p>
+<ul>
+<li>只使用 <strong>4 个标准 CPU performance counters</strong>；</li>
+<li>结合 per-tier 的 MLP 分解；</li>
+<li>就能在线估算某页访问对 stall 的贡献。</li>
+</ul>
+<p>这一点很重要，因为很多 criticality-aware 设计最后都输在“实现成本过高”。PACT 这里试图证明：</p>
+<ul>
+<li>不需要专门加新硬件支持；</li>
+<li>也不必做粗粒度离线 profiling；</li>
+<li>只要建模做得对，就可以在线、页粒度地追踪 performance criticality。</li>
+</ul>
+<h3 id="4-soaralto-tmo">4. 相比 SoarAlto / TMO 一类工作的差异<a class="headerlink" href="#4-soaralto-tmo" title="Permanent link">&para;</a></h3>
+<p>论文在 related work 里反复强调：过去有些工作已经开始注意“criticality”而不是单纯 hotness，但它们仍有明显限制。</p>
+<p>比如：</p>
+<ul>
+<li><strong>SoarAlto</strong> 虽然使用了 cost-aware 思路，但偏向离线 profiling，而且粒度偏粗（对象级）；</li>
+<li><strong>TMO</strong> 等系统利用 stall 信号，但更多是系统级 pressure indicator，而不是每页、每层可解释的核心抽象。</li>
+</ul>
+<p>PACT 的不同点是：</p>
+<ul>
+<li>它强调 <strong>在线</strong>；</li>
+<li>强调 <strong>page-granularity</strong>；</li>
+<li>强调 <strong>per-tier</strong> stall attribution；</li>
+<li>并且策略层也彻底围绕 PAC 重构。</li>
+</ul>
+<p>所以它并不是“已有 hotness 方案的一个补丁”，而是更像一次设计哲学的切换。</p>
+<h3 id="5-pac-centric-migration-policy">5. PAC-centric migration policy<a class="headerlink" href="#5-pac-centric-migration-policy" title="Permanent link">&para;</a></h3>
+<p>即使能估计 PAC，另一个问题仍然存在：<strong>怎么迁？</strong></p>
+<p>论文认为，criticality-aware 设计必须同时解决：</p>
+<ul>
+<li>哪些页该 promotion；</li>
+<li>哪些页该 demotion；</li>
+<li>迁移要多激进；</li>
+<li>如何避免过多迁移把收益吃掉。</li>
+</ul>
+<p>为此，PACT 提出了两个关键策略：</p>
+<h4 id="eager-demotion">eager demotion<a class="headerlink" href="#eager-demotion" title="Permanent link">&para;</a></h4>
+<p>先主动把不那么关键的页从快层挪出去，为真正高 PAC 页腾空间。</p>
+<p>这个设计的重点不只是“淘汰冷页”，而是为高 criticality 页的及时上移创造条件。也就是说，它的 demotion 逻辑不是围绕“最近少访问”，而是围绕“相对性能价值低”。</p>
+<h4 id="adaptive-promotion">adaptive promotion<a class="headerlink" href="#adaptive-promotion" title="Permanent link">&para;</a></h4>
+<p>在 promotion 时，PACT 不做昂贵的全局排序，也不依赖固定阈值，而是通过轻量统计采样和 adaptive binning 去找真正值得升到 DRAM 的高 PAC 页。</p>
+<p>这能带来两个好处：</p>
+<ul>
+<li>降低 runtime 管理开销；</li>
+<li>更适应 PAC 分布高度偏斜的情况。</li>
+</ul>
+<p>论文特别指出，PAC 分布通常是 highly skewed，这意味着真正“必须放进 DRAM”的页只是一小部分。如果策略不考虑这一点，就很容易迁移过多无关紧要的页。</p>
+<h2 id="_6">实验与结果<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>PACT 的实验结果很漂亮，而且不只是“略优于 baseline”，而是显著领先。</p>
+<p>论文的主要结果包括：</p>
+<ul>
+<li>在 13 个 workload 上测试；</li>
+<li>覆盖 graph analytics、HPC、in-memory caching、ML 等多类内存密集场景；</li>
+<li>对比了 7 个 state-of-the-art 的 tiering 设计，包括：</li>
+<li>SoarAlto</li>
+<li>Memtis</li>
+<li>Colloid</li>
+<li>Nomad</li>
+<li>TPP</li>
+<li>Linux NUMA Balancing Tiering 等</li>
+<li>在不同快慢层容量比例下，PACT 最高获得：</li>
+<li><strong>61% 的性能提升</strong>（相对第二好的系统）</li>
+<li>同时迁移次数可减少：</li>
+<li><strong>最高 50×</strong></li>
+</ul>
+<p>这个组合结果非常关键。</p>
+<p>因为很多 tiering 论文会出现一种常见局面：</p>
+<ul>
+<li>性能提升有一点；</li>
+<li>但迁移非常频繁；</li>
+<li>最终系统成本、带宽消耗和稳定性都变差。</li>
+</ul>
+<p>PACT 的亮点是，它不仅把真正关键的页找得更准，还显著减少了“无效迁移”。这说明它的 policy 设计和指标设计是相互支撑的，而不是单点优化。</p>
+<h2 id="_7">这篇论文真正的贡献<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>我认为这篇论文真正的贡献有四个层次。</p>
+<h3 id="1hotness">贡献 1：明确否定了“hotness 足够”的设计前提<a class="headerlink" href="#1hotness" title="Permanent link">&para;</a></h3>
+<p>这是这篇论文最根本的价值。它不是简单说 hotness 不够好，而是通过动机实验和整体设计明确指出：</p>
+<p><strong>频率并不是性能关键性的可靠代理。</strong></p>
+<p>这会直接影响很多现有 tiered memory 设计的基本假设。</p>
+<h3 id="2-criticality">贡献 2：把 criticality 做成了在线、页级、可用于决策的指标<a class="headerlink" href="#2-criticality" title="Permanent link">&para;</a></h3>
+<p>很多系统工作都知道“criticality 更重要”，但真正难的是把它变成一个：</p>
+<ul>
+<li>能在线算；</li>
+<li>能页级算；</li>
+<li>能低成本算；</li>
+<li>能拿来直接驱动 policy 的指标。</li>
+</ul>
+<p>PACT 的 PAC 做的就是这件事。</p>
+<h3 id="3-per-tier-stall-attribution">贡献 3：把 per-tier stall attribution 引入页迁移决策<a class="headerlink" href="#3-per-tier-stall-attribution" title="Permanent link">&para;</a></h3>
+<p>PACT 的精髓不只是“算 stall”，而是“把 stall 和 tier 绑定起来，再把它和 page 绑定起来”。</p>
+<p>这对于 tiered memory 很关键，因为系统最终要回答的是：</p>
+<ul>
+<li>这个页继续留在慢层的代价是多少？</li>
+<li>如果把它升到快层，能省下多少 stall？</li>
+</ul>
+<p>PACT 是在回答这个真正和 placement 相关的问题，而不是泛泛地讨论内存压力。</p>
+<h3 id="4-criticality-first">贡献 4：证明 criticality-first 在工程上是可落地的<a class="headerlink" href="#4-criticality-first" title="Permanent link">&para;</a></h3>
+<p>论文最有说服力的一点是，它没有要求一个巨大而不可部署的系统改造，而是利用现有 CPU counter 和在线分析，把方案落到了实践层。</p>
+<p>这使得它不只是“一个漂亮的理论方向”，而更像一个有实际采用潜力的系统设计。</p>
+<h2 id="_8">局限与问题<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>虽然我认为这篇工作很强，但它也不是没有边界。</p>
+<h3 id="1-pac">1. PAC 仍然是模型，不是直接真值<a class="headerlink" href="#1-pac" title="Permanent link">&para;</a></h3>
+<p>PACT 虽然比 hotness 更接近真实性能代价，但它本质上仍然是基于 counter 和 analytical model 的在线估计，而不是直接观测“这个页如果在另一层会怎么样”的真值。</p>
+<p>这意味着：</p>
+<ul>
+<li>模型准确性对最终效果影响很大；</li>
+<li>一旦 workload 或硬件行为超出建模假设，可能会出现误差。</li>
+</ul>
+<h3 id="2">2. 实验规模仍然属于研究原型级别<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<p>13 个 workload 和多个配置已经不错，但离真实大规模数据中心还有距离。</p>
+<p>特别是在 CXL 环境里，真实部署可能还涉及：</p>
+<ul>
+<li>多租户干扰</li>
+<li>带宽争用</li>
+<li>更复杂的 NUMA/CXL 互连结构</li>
+<li>长时间运行下相位波动</li>
+</ul>
+<p>这些都可能影响 PAC 的稳定性和迁移策略收益。</p>
+<h3 id="3-stall-mlp">3. 实现依赖对 stall / MLP 的精细理解<a class="headerlink" href="#3-stall-mlp" title="Permanent link">&para;</a></h3>
+<p>PACT 的优势来自它对 stall 和 per-tier MLP 的细致建模。但这也意味着：</p>
+<ul>
+<li>模型设计和实现复杂度比 hotness-based 方案高；</li>
+<li>调试与验证门槛也更高。</li>
+</ul>
+<p>换句话说，这篇论文是“更聪明的系统”，但也天然更难实现和维护。</p>
+<h3 id="4">4. 没有真正解决更高层对象语义问题<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
+<p>PACT 仍然是 page-granular 的系统。对于很多更上层的对象（例如 graph partition、KV item、tensor shard），页只是它们的物理承载单位，不一定是语义上最自然的优化单位。</p>
+<p>所以从长远看，它也许还可以和 object-level placement 或 application hint 结合，进一步提升效果。</p>
+<h2 id="_9">和相关工作的关系<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>这篇论文可以放在三条脉络里看。</p>
+<h3 id="hotness-based-tiering">与传统 hotness-based tiering 相比<a class="headerlink" href="#hotness-based-tiering" title="Permanent link">&para;</a></h3>
+<p>PACT 最大的区别是：</p>
+<ul>
+<li>传统方案问“谁访问得多？”</li>
+<li>PACT 问“谁更拖慢 CPU？”</li>
+</ul>
+<p>这是一个目标函数层面的变化，而不是采样精度上的小改进。</p>
+<h3 id="soaralto-criticality-aware">与 SoarAlto 一类 criticality-aware 工作相比<a class="headerlink" href="#soaralto-criticality-aware" title="Permanent link">&para;</a></h3>
+<p>PACT 更进一步地把 criticality 做到了：</p>
+<ul>
+<li>在线</li>
+<li>页级</li>
+<li>per-tier</li>
+<li>policy-driven</li>
+</ul>
+<p>因此它更像是从“criticality 是一个分析视角”走向了“criticality 是系统设计中心”。</p>
+<h3 id="stall-pressure-memory-pressure">与 stall-pressure / memory pressure 驱动方案相比<a class="headerlink" href="#stall-pressure-memory-pressure" title="Permanent link">&para;</a></h3>
+<p>PACT 不只是感知“系统现在很卡”，而是试图定位：</p>
+<ul>
+<li><strong>到底是哪一批页让系统卡</strong></li>
+<li><strong>把哪一批页升上去最值</strong></li>
+</ul>
+<p>这让它更适合做细粒度的 fast-tier 预算分配。</p>
+<h2 id="_10">对研究者的启发<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>这篇论文给我的最大启发是：</p>
+<h3 id="1">启发 1：指标必须和最终优化目标对齐<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p>如果目标是提高性能，就应该尽量直接测量“性能代价”，而不是拿访问次数做代理。PACT 展示了一个非常典型的系统设计原则：</p>
+<p><strong>代理指标如果离目标太远，后续 policy 再怎么精修也补不回来。</strong></p>
+<h3 id="2tiered-memory-stall">启发 2：tiered memory 不只是容量管理，更是 stall 管理<a class="headerlink" href="#2tiered-memory-stall" title="Permanent link">&para;</a></h3>
+<p>很多分层内存工作把它看成容量扩展问题，但 PACT 让人更明确地看到：</p>
+<ul>
+<li>真正决定用户体验和吞吐的，不只是页放哪；</li>
+<li>而是这些页访问如何映射到 CPU stall 上。</li>
+</ul>
+<h3 id="3page-placement-mlp">启发 3：page placement 应该和 MLP 深度绑定<a class="headerlink" href="#3page-placement-mlp" title="Permanent link">&para;</a></h3>
+<p>PACT 再次说明，在内存系统里，单次访问延迟没有意义，<strong>暴露给 CPU 的有效延迟</strong>才有意义。而这个有效延迟高度依赖 MLP。以后做 page placement、CXL placement、甚至 heterogeneous memory scheduling，都值得沿这个方向继续深入。</p>
+<h2 id="_11">我的评价<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<p>我对这篇论文的评价是：<strong>很强，而且是“方向上很对”的强。</strong></p>
+<p>它最打动我的地方不是结果数字本身，而是它把 tiered memory 的核心问题重新定义得更准确了：</p>
+<ul>
+<li>不是“如何更准地找热点页”；</li>
+<li>而是“如何更准地找真正影响性能的页”。</li>
+</ul>
+<p>这一步定义上的转向非常重要。</p>
+<p>从论文质量看，它有几个很突出的优点：</p>
+<ul>
+<li>动机非常扎实，例子一眼能看懂；</li>
+<li>PAC 这个抽象既有直觉，又有工程可实现性；</li>
+<li>policy 设计与指标设计是统一的，不是拼凑式系统；</li>
+<li>实验结果强，而且“性能更高 + 迁移更少”这一点很有说服力。</li>
+</ul>
+<p>如果要挑毛病，我会说：</p>
+<ul>
+<li>它仍然高度依赖建模质量；</li>
+<li>在更复杂、更大规模的真实 CXL 环境下是否还能保持同样收益，还需要更多验证。</li>
+</ul>
+<p>但总体上，我认为它是 <strong>tiered memory / CXL memory management 方向一篇非常值得认真读的论文</strong>。</p>
+<h2 id="_12">适合继续追的问题<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<p>这篇论文之后，很自然会延伸出这些研究问题：</p>
+<ol>
+<li>PAC 是否能扩展到对象级 / 子页级 placement？</li>
+<li>在真实 CXL disaggregated memory 环境中，PAC 建模还能否保持稳定？</li>
+<li>PAC 与应用语义 hint、编译器 hint、对象生命周期信息能否结合？</li>
+<li>PACT 是否能与安全机制结合，比如把 criticality 与数据敏感性一起纳入 placement？</li>
+<li>是否可以把类似 criticality-first 的思想推广到缓存管理、prefetch、甚至任务调度层？</li>
+</ol>
+<h2 id="takeaway">Takeaway<a class="headerlink" href="#takeaway" title="Permanent link">&para;</a></h2>
+<p>PACT 最重要的贡献，不只是又提出了一个更好的页迁移策略，而是把 tiered memory 的决策基准从“访问热度”重新拉回到了“性能代价”。在 DRAM 与 CXL/慢层内存共同存在的时代，这种从 hotness-first 到 criticality-first 的转向，很可能会成为下一代内存管理设计的主线。</p>
+<hr />
+<h1 id="pac">论文核心PAC算法 完整详细拆解<a class="headerlink" href="#pac" title="Permanent link">&para;</a></h1>
+<p>PAC（<strong>Per-page Access Criticality，页面级访问关键性</strong>）是这篇ASPLOS 2026论文的核心创新根基，也是PACT分层内存系统区别于所有传统热度驱动方案的核心。它是一套<strong>在线、页面粒度、仅依赖通用CPU硬件计数器、无专用硬件依赖</strong>的算法，核心目标是精准量化单个内存页面对CPU执行停顿的真实性能贡献，彻底替代传统“访问频率（热度）”这一不准确的代理指标。</p>
+<h2 id="pac_1">一、PAC算法的核心定位与要解决的核心挑战<a class="headerlink" href="#pac_1" title="Permanent link">&para;</a></h2>
+<h3 id="11">1.1 核心定义<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<p>PAC是一个量化指标，<strong>其数值直接对应一个内存页面在运行过程中引发的CPU停顿周期总数</strong>，而非页面的访问次数。PAC值越高，代表该页面的性能关键性越强，放到高速DRAM层能带来的性能收益越大；反之，PAC值越低，哪怕访问频率很高，放到低速CXL/NUMA层也不会对性能造成明显影响。</p>
+<h3 id="12">1.2 算法要解决的核心行业难题<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<p>传统CPU的性能计数器存在根本性的粒度缺陷：</p>
+<ul>
+<li>CPU暴露的停顿相关计数器是<strong>核粒度</strong>的，只能统计一个CPU核的总停顿，无法区分停顿来自哪个内存层（DRAM/远端NUMA/CXL），更无法归因到具体的内存页面。</li>
+<li>现有方案只能通过“访问频率”间接推断页面的性能影响，完全忽略了MLP（内存级并行度）、访问模式带来的巨大性能差异，导致调度决策完全偏离真实性能需求。</li>
+</ul>
+<p>PAC算法的核心突破，就是解决了<strong>无专用硬件支持下，把核粒度的CPU总停顿，精准拆解到每个内存层、每个4KB/巨页粒度的内存页面</strong>这一核心难题。</p>
+<h3 id="13">1.3 算法的核心设计目标<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>在线实时计算</strong>：无需离线剖析，随应用运行周期性更新，适配动态变化的负载相位；</li>
+<li><strong>页面级细粒度</strong>：支持4KB标准页和2MB透明巨页（THP），匹配操作系统页面迁移的最小粒度；</li>
+<li><strong>极低开销</strong>：仅依赖4个通用CPU性能计数器，内存开销仅0.6%，CPU开销可忽略；</li>
+<li><strong>硬件普适性</strong>：无需定制硬件，主流x86处理器（Intel/AMD）均可适配；</li>
+<li><strong>精准量化性能影响</strong>：直接和CPU停顿挂钩，而非间接的访问频率，从根源上匹配分层内存的调度需求。</li>
+</ol>
+<h2 id="pac_2">二、PAC算法成立的核心理论前提（论文关键洞察）<a class="headerlink" href="#pac_2" title="Permanent link">&para;</a></h2>
+<p>PAC算法不是凭空设计的，它完全建立在论文通过96个负载大规模实证分析得出的4个核心洞察之上，这也是算法逻辑成立的底层基础：</p>
+<h3 id="1cpu">洞察1：分层CPU停顿可通过极简公式精准建模<a class="headerlink" href="#1cpu" title="Permanent link">&para;</a></h3>
+<p>每个内存层引发的CPU停顿，和该层的LLC（最后一级缓存）缺失数、MLP呈严格的线性关系，公式如下：</p>
+<div class="arithmatex">\[LLC-stalls = k × \frac{LLC-misses}{MLP}\]</div>
+<ul>
+<li><span class="arithmatex">\(LLC-stalls\)</span>：该内存层的LLC缺失引发的CPU总停顿周期数（直接对应性能损失）；</li>
+<li><span class="arithmatex">\(k\)</span>：层级相关系数，由该内存层的访问延迟、硬件架构特性决定，同硬件下跨负载高度稳定；</li>
+<li><span class="arithmatex">\(LLC-misses\)</span>：该内存层的LLC缺失总数；</li>
+<li><span class="arithmatex">\(MLP\)</span>：该内存层的内存级并行度，即CPU能并行处理的该层内存请求平均数。</li>
+</ul>
+<p>论文验证：该公式在3种延迟配置、96个负载下，和真实CPU停顿的<strong>皮尔逊相关系数超过0.98</strong>，拟合精度远高于仅用LLC缺失数的传统方案。</p>
+<h3 id="2mlpcpu">洞察2：分层MLP可通过通用CPU硬件计数器在线测量<a class="headerlink" href="#2mlpcpu" title="Permanent link">&para;</a></h3>
+<p>Intel CPU的<strong>CHA（Caching and Home Agent）/TOR（Table Of Requests）队列</strong>，是CPU核心与内存控制器之间的请求调度单元，所有LLC缺失后的内存请求都必须经过该队列，且队列计数器天然按内存层隔离。</p>
+<ul>
+<li>队列的占用率计数器，可直接量化该内存层的平均在飞请求数，也就是该层的MLP；</li>
+<li>无需定制硬件，Intel Xeon可扩展处理器全线支持该计数器。</li>
+</ul>
+<h3 id="3mlp">洞察3：MLP具备强相位稳定性<a class="headerlink" href="#3mlp" title="Permanent link">&para;</a></h3>
+<p>应用的执行呈现明显的相位特征，<strong>在数十毫秒的短时间窗口内，MLP的值几乎保持稳定</strong>，仅在秒级的相位切换时才会发生明显变化。
+这一特性是PAC算法的核心支撑：在稳定的窗口内，该内存层<strong>单次LLC缺失带来的CPU停顿成本是固定的</strong>，为页面级的比例归因提供了理论基础。</p>
+<h3 id="4_1">洞察4：稳定窗口内，比例归因可精准实现页面级停顿拆解<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h3>
+<p>在MLP稳定的短窗口内，该层的总CPU停顿，可按每个页面的LLC缺失访问次数的占比，等比例分配到每个页面，从而得到单个页面引发的CPU停顿数。
+论文验证：该归因方式在20ms窗口内，和真实页面级性能影响的匹配度极高，完全满足分层内存调度的精度需求。</p>
+<h2 id="pac_3">三、PAC核心算法完整流程与伪代码解析<a class="headerlink" href="#pac_3" title="Permanent link">&para;</a></h2>
+<p>PAC算法是一套<strong>周期性运行的两阶段流水线</strong>，论文默认运行周期为20ms（兼顾精度、开销与MLP相位稳定性），完整对应论文中的<code>Algorithm 1: PAC Sampling</code>。</p>
+<h3 id="31">3.1 算法整体框架<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<p>每个20ms的采样窗口内，算法分为两个串行执行的核心阶段：</p>
+<ol>
+<li><strong>阶段1：分层总停顿建模</strong>：采集硬件计数器，计算目标低速层的总CPU停顿周期<span class="arithmatex">\(S\)</span>；</li>
+<li><strong>阶段2：页面级停顿归因与PAC更新</strong>：通过PEBS采样获取页面级访问数据，把总停顿<span class="arithmatex">\(S\)</span>分配到每个页面，迭代更新每个页面的PAC值。</li>
+</ol>
+<h3 id="32">3.2 算法依赖的硬件计数器<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<p>算法仅需4个通用CPU性能计数器，完全对应论文中的Table 1，无任何专用硬件需求：</p>
+<table>
+<thead>
+<tr>
+<th>计数器类型</th>
+<th>寄存器名称</th>
+<th>核心作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PEBS采样</td>
+<td>MEM_LOAD_L3_MISS_RETIRED</td>
+<td>捕获低速层的LLC缺失读访问，记录访问的虚拟地址、页面访问次数</td>
+</tr>
+<tr>
+<td>T1（TOR计数）</td>
+<td>TOR_OCCUPANCY</td>
+<td>累计记录TOR队列每个周期的在飞请求总数（周期数×单周期在飞请求数）</td>
+</tr>
+<tr>
+<td>T2（TOR周期）</td>
+<td>TOR_OCCUPANCY_COUNTER0</td>
+<td>累计记录TOR队列非空的CPU周期总数</td>
+</tr>
+<tr>
+<td>层级缺失计数</td>
+<td>OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_MISS.REMOTE_DRAM</td>
+<td>统计低速层的LLC总缺失数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33">3.3 算法伪代码与逐行深度解析<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<p>论文中PAC算法的核心伪代码如下，下文逐行拆解计算逻辑与设计原理：
+<div class="highlight"><pre><span></span><code>Algorithm 1: PAC Sampling (every 20ms)
+Input: 硬件计数器、PEBS采样数据
+Output: 所有采样页面的更新后PAC值
+1  Measure slow-tier metrics: LLC-misses, MLP ← ΔT1/ΔT2
+2  Estimate slow-tier stalls: S ← k · (LLC-misses / MLP)
+3  Sample page accesses using PEBS:
+4      Record per-page (p) info: vaddr, access count (Aₚ)
+5  Update total accesses: Aₜ ← Σₚ Aₚ
+6  foreach sampled page p do
+7      Attribute stalls to page: Sₚ ← S · (Aₚ / Aₜ)
+8      Update PAC: PAC[p] ← α · PAC[p] + Sₚ  α∈[0,1]
+</code></pre></div></p>
+<h4 id="1mlp">第1行：低速层核心指标采集与MLP计算<a class="headerlink" href="#1mlp" title="Permanent link">&para;</a></h4>
+<p>这一行是算法的硬件数据输入环节，核心是计算低速层的MLP：</p>
+<ol>
+<li><strong>窗口增量计算</strong>：在20ms窗口的起始和结束时刻，分别读取T1（TOR_OCCUPANCY）、T2（TOR_OCCUPANCY_COUNTER0）、低速层LLC总缺失数，计算窗口内的增量ΔT1、ΔT2、LLC-misses，避免累计值的干扰。</li>
+<li><strong>分层MLP计算</strong>：<span class="arithmatex">\(MLP = \Delta T1 / \Delta T2\)</span></li>
+<li>物理含义：ΔT2是窗口内TOR队列非空的总周期数，ΔT1是窗口内TOR队列所有周期的在飞请求数累加。二者的比值，就是<strong>该低速层在队列活跃时，平均每个CPU周期的并行在飞请求数</strong>，也就是该层的平均MLP。</li>
+<li>论文验证：该方式计算的TOR-MLP，和Intel官方的L2_MLP系统级指标趋势完全一致，且具备分层隔离的核心优势。</li>
+</ol>
+<h4 id="2cpu">第2行：低速层总CPU停顿计算<a class="headerlink" href="#2cpu" title="Permanent link">&para;</a></h4>
+<p>这一行是算法的核心建模环节，基于洞察1的公式，计算窗口内低速层访问引发的CPU总停顿周期<span class="arithmatex">\(S\)</span>：</p>
+<p>公式：<span class="arithmatex">\(S = k × (LLC-misses / MLP)\)</span></p>
+<p>参数说明：</p>
+<ul>
+<li><span class="arithmatex">\(k\)</span>是该低速层的硬件校准系数，由内存延迟、架构决定，同硬件下仅需一次离线校准，跨负载稳定不变；</li>
+<li><span class="arithmatex">\(LLC-misses\)</span>是窗口内低速层的总LLC缺失数；</li>
+<li><span class="arithmatex">\(MLP\)</span>是第1行计算的该层窗口内平均MLP。</li>
+</ul>
+<p>核心逻辑：MLP作为分母，直接决定了单次LLC缺失的性能成本——MLP越高，单次缺失带来的停顿越小，完美区分了高MLP流式访问和低MLP指针追踪访问的性能差异。</p>
+<h4 id="3-5">第3-5行：页面级访问数据采集与统计<a class="headerlink" href="#3-5" title="Permanent link">&para;</a></h4>
+<p>这一行是算法的页面粒度数据输入环节，基于Intel PEBS（处理器事件基于采样）硬件实现低开销的页面访问跟踪：</p>
+<ol>
+<li><strong>PEBS采样配置</strong>：仅采样低速层的MEM_LOAD_L3_MISS_RETIRED事件（LLC缺失的读访问），默认采样率为1/400（每400个事件采样1次），在精度和开销间达到最优平衡；</li>
+<li><strong>页面级数据记录</strong>：对每个采样到的页面<span class="arithmatex">\(p\)</span>，记录其虚拟地址vaddr，以及窗口内的采样访问次数<span class="arithmatex">\(A_p\)</span>；</li>
+<li><strong>总访问数统计</strong>：累加所有采样页面的访问次数，得到窗口内总采样访问数<span class="arithmatex">\(A_t = \sum_p A_p\)</span>。</li>
+</ol>
+<blockquote>
+<p>论文设计细节：仅采样低速层的读访问，原因是CXL/NUMA链路为全双工，写操作的性能影响极小；且仅需低速层访问数据即可指导页面提升决策，快层页面的降级可复用Linux内核LRU机制，进一步降低开销。</p>
+</blockquote>
+<h4 id="6-7">第6-7行：单页面停顿比例归因<a class="headerlink" href="#6-7" title="Permanent link">&para;</a></h4>
+<p>这一行是算法的核心拆解环节，把核粒度的总停顿<span class="arithmatex">\(S\)</span>，精准分配到每个页面：</p>
+<ul>
+<li>公式：<span class="arithmatex">\(S_p = S × (A_p / A_t)\)</span></li>
+<li>物理含义：窗口内页面<span class="arithmatex">\(p\)</span>引发的CPU停顿周期数<span class="arithmatex">\(S_p\)</span>，等于低速层总停顿<span class="arithmatex">\(S\)</span>，乘以该页面的访问次数占总采样访问数的比例。</li>
+<li>合理性支撑：基于洞察3的MLP相位稳定性，窗口内单次LLC缺失的平均停顿成本固定，因此页面的总停顿和其访问次数呈严格正比，完美实现了页面级的停顿归因。</li>
+</ul>
+<h4 id="8pac">第8行：PAC值的迭代更新<a class="headerlink" href="#8pac" title="Permanent link">&para;</a></h4>
+<p>这一行是算法的输出环节，完成每个页面PAC值的最终更新：</p>
+<p>公式：<span class="arithmatex">\(PAC[p] = \alpha × PAC[p] + S_p\)</span></p>
+<p>参数说明：</p>
+<ul>
+<li><span class="arithmatex">\(PAC[p]\)</span>是页面<span class="arithmatex">\(p\)</span>的累计PAC值，也是最终用于页面调度的核心指标；</li>
+<li><span class="arithmatex">\(\alpha\)</span>是平滑衰减因子（冷却系数），取值范围[0,1]，论文默认值为<span class="arithmatex">\(\alpha=1.0\)</span>；</li>
+<li><span class="arithmatex">\(S_p\)</span>是当前窗口内该页面新增的停顿周期数。</li>
+</ul>
+<p>关键设计细节：</p>
+<ul>
+<li>默认<span class="arithmatex">\(\alpha=1.0\)</span>，即纯累计无冷却，和传统热度策略必须依赖冷却机制完全不同。论文验证：由于PAC值的分布高度倾斜，新的性能关键页面会自然通过新增<span class="arithmatex">\(S_p\)</span>快速提升PAC值，进入高优先级队列，无需额外的时间衰减；</li>
+<li>可选冷却机制：对相位变化极快的负载，可配置<span class="arithmatex">\(\alpha&lt;1.0\)</span>，让历史PAC值逐步衰减，更侧重近期的性能关键性；</li>
+<li>支持巨页适配：PEBS采样是4KB粒度，若采样页面属于2MB巨页，PACT会把巨页内所有4KB子页的PAC值累加，作为巨页的整体PAC值，适配巨页迁移场景。</li>
+</ul>
+<h2 id="pac_4">四、PAC算法的关键配套设计与参数优化<a class="headerlink" href="#pac_4" title="Permanent link">&para;</a></h2>
+<h3 id="41">4.1 采样周期的选择<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<p>论文默认采样周期为20ms，核心设计考量：</p>
+<ol>
+<li>下限：Linux perf无法在10ms以内的窗口提供精准的计数器读数，过短的窗口会引入严重的噪声，且采样开销急剧上升；</li>
+<li>上限：过长的窗口会破坏MLP的相位稳定性，导致比例归因的精度下降，且无法快速响应负载的相位切换；</li>
+<li>最优区间：20ms窗口完美平衡了MLP稳定性、归因精度、采样开销，论文验证：窗口可在10ms~100ms范围内灵活调整，性能波动小于5%。</li>
+</ol>
+<h3 id="42-pac">4.2 PAC值的跟踪与存储<a class="headerlink" href="#42-pac" title="Permanent link">&para;</a></h3>
+<p>为了实现低开销的PAC值管理，论文设计了极简的存储结构：</p>
+<ol>
+<li>每个被采样的页面，仅需25字节的元数据（虚拟地址、累计PAC值、最后采样计数），内存开销仅0.6%；</li>
+<li>采用哈希表存储所有页面的PAC数据，实现O(1)时间复杂度的插入、查询、更新，适配数百万级页面的管理需求；</li>
+<li>无需全局排序，配套自适应分箱机制实现高PAC页面的快速筛选，彻底避免了全局排序的高额开销。</li>
+</ol>
+<h3 id="43">4.3 跨平台适配设计<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<p>PAC算法不绑定Intel平台，可无缝适配AMD等主流x86处理器：</p>
+<ul>
+<li>AMD Zen架构不暴露TOR队列计数器，论文通过<strong>Little's Law（利特尔法则）</strong> 实现MLP的替代计算：<span class="arithmatex">\(MLP ≈ 内存访问延迟 × 内存带宽\)</span>；</li>
+<li>AMD可通过IBS（指令基于采样）替代Intel PEBS，实现页面级访问采样，通过PMU计数器获取分层的延迟、带宽数据，完成MLP计算与PAC建模；</li>
+<li>论文验证：该替代方案可精准捕捉MLP的时序变化趋势，仅绝对值存在轻微高估，对PAC调度的最终性能影响极小。</li>
+</ul>
+<h2 id="pac_5">五、PAC算法的有效性验证（论文实验支撑）<a class="headerlink" href="#pac_5" title="Permanent link">&para;</a></h2>
+<p>论文通过多组实验，严格验证了PAC算法的精度、有效性与优势：</p>
+<ol>
+<li><strong>建模精度验证</strong>：PAC算法计算的页面级停顿，和真实CPU执行停顿的皮尔逊相关系数&gt;0.98，远高于访问频率指标；</li>
+<li><strong>与热度指标的性能对比</strong>：在相同页面迁移次数的控制变量实验中，PAC驱动的调度策略，比纯访问频率驱动的策略，性能提升12%~22%，在MLP方差大的图计算负载中提升尤为显著；</li>
+<li><strong>开销验证</strong>：PAC算法仅占用2个专用后台线程，CPU开销&lt;1%，内存开销仅0.6%，完全满足数据中心生产环境的部署要求；</li>
+<li><strong>鲁棒性验证</strong>：跨13个不同类型的内存密集型负载、7种快慢层内存比例，PAC算法均能稳定输出精准的关键性排序，支撑PACT系统实现稳定的性能收益。</li>
+</ol>
+<h2 id="pac_6">六、PAC算法的局限性与未来优化方向<a class="headerlink" href="#pac_6" title="Permanent link">&para;</a></h2>
+<p>论文也明确了当前PAC算法的局限性，并提出了对应的优化路径：</p>
+<h3 id="61">6.1 当前核心局限<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<p>多租户混部场景下的归因精度下降：当多个异构访问模式的应用（高MLP流式应用+低MLP指针追踪应用）共享同一个低速内存层时，同层内不同应用的单次缺失停顿成本不同，基于访问频率的比例归因，会轻微稀释真正延迟敏感页面的PAC值。</p>
+<h3 id="62">6.2 未来优化方向<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>延迟加权归因优化</strong>：利用Intel Sapphire Rapids及更新CPU的PEBS延迟报告特性，在归因公式中加入每个页面的采样访问延迟，公式优化为：<span class="arithmatex">\(S_p = S × \frac{A_p · l_p}{\sum_i A_i · l_i}\)</span>，其中<span class="arithmatex">\(l_p\)</span>是页面<span class="arithmatex">\(p\)</span>的采样访问延迟，进一步提升混部场景下的归因精度；</li>
+<li><strong>写操作的PAC建模</strong>：当前算法仅优化读访问，未来可扩展对写操作的性能关键性建模，适配持久化内存等写入受限的低速介质；</li>
+<li><strong>全栈扩展</strong>：把PAC指标扩展到LLC缓存管理、CPU任务调度、容器资源隔离等场景，构建全栈的性能关键性感知系统。</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.sections", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
