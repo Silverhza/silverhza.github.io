@@ -1,5 +1,5 @@
 ---
-title: Space-Control: Process-Level Isolation for Sharing CXL-based Disaggregated Memory
+title: "Space-Control: Process-Level Isolation for Sharing CXL-based Disaggregated Memory"
 authors: Kaustav Goswami, Sean Peisert, Venkatesh Akella, Jason Lowe-Power
 year: 2026
 venue: arXiv
