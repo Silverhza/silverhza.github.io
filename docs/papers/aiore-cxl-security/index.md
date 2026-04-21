@@ -1,5 +1,5 @@
 ---
-title: Efficient Security Support for CXL Memory through Adaptive Incremental Offloaded (Re-)Encryption
+title: "Efficient Security Support for CXL Memory through Adaptive Incremental Offloaded (Re-)Encryption"
 authors: Chuanhan Li, Jishen Zhao, Yuanchao Xu
 year: 2025
 venue: MICRO '25
