@@ -1,0 +1,2159 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="科研论文总结、知识点卡片与专题梳理">
+      
+      
+      
+        <link rel="canonical" href="https://silverhza.github.io/papers/neomem-cxl-native-memory-tiering/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../pact-tiered-memory-criticality/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>NeoMem：面向 CXL 原生分层内存的软硬件协同设计 - Flower Research Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue-grey">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#neomem-hardwaresoftware-co-design-for-cxl-native-memory-tiering" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Flower Research Notes" class="md-header__button md-logo" aria-label="Flower Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Flower Research Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              NeoMem：面向 CXL 原生分层内存的软硬件协同设计
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="blue-grey"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="blue-grey"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Silverhza" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Silverhza
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  论文总结
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../notes/" class="md-tabs__link">
+          
+  
+  
+  知识点卡片
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../topics/" class="md-tabs__link">
+          
+  
+  
+  专题
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../content-conventions/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  内容规范
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Flower Research Notes" class="md-nav__button md-logo" aria-label="Flower Research Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Flower Research Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Silverhza" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Silverhza
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文总结
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    论文总结
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    论文总结
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NeoMem：面向 CXL 原生分层内存的软硬件协同设计
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NeoMem：面向 CXL 原生分层内存的软硬件协同设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文在解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景 / 为什么这个问题重要？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心思路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键机制 / 方法细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="关键机制 / 方法细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-profilerneoprof" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 设备侧 profiler：NeoProf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 为什么传统方法不够好
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 为什么传统方法不够好">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pte-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PTE-scan 的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hint-fault" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hint-fault 的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pmu-sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PMU sampling 的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-hot-page-detector-sketch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hot page detector：基于 Sketch 的检测器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-os-driver-daemon-migration-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. OS 侧配合：driver + daemon + migration policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-neomem-native" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. NeoMem 真正“native”的地方
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验与结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文真正的贡献
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="这篇论文真正的贡献">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-memory-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 1：准确识别了 memory tiering 的真正瓶颈
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-device-side-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 2：提出了 device-side profiling 这一条新路径
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 3：让 profiling 更接近“真实慢层访问”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-cxl-memory-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 4：证明硬件/软件协同在 CXL memory management 上是可行的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限与问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="局限与问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-hotness-first-costcriticality-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 它本质上还是 hotness-first，而不是 cost/criticality-first
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 需要设备侧硬件改造
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 对多样化工作负载是否足够稳，还需要更长时间验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-criticality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 它没有触及“criticality”这一层
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        和相关工作的关系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="和相关工作的关系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pte-scan-hint-fault-pmu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与传统 PTE-scan / hint-fault / PMU 方案相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#numa-style-memory-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 NUMA-style memory tiering 相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 PACT 这类后续工作相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对研究者的启发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="对研究者的启发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1cxl-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 1：CXL 时代，设备侧 controller 不是被动部件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 2：观测点决定优化上限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cxl-memory-numa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 3：不要把 CXL memory 只当成“更慢的 NUMA”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        我的评价
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        适合继续追的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#takeaway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Takeaway
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pact-tiered-memory-criticality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PACT：以性能关键性为核心的分层内存设计
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--published"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../space-control-cxl-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Space-Control：CXL 共享解耦内存中的进程级隔离
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--published"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aiore-cxl-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AIORE：CXL Memory 安全支持
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--published"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识点卡片
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    知识点卡片
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    知识点卡片
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes/gem5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    gem5手册
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    专题
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    专题
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    专题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../content-conventions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    内容规范
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一句话总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文在解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景 / 为什么这个问题重要？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心思路
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键机制 / 方法细节
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="关键机制 / 方法细节">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-profilerneoprof" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 设备侧 profiler：NeoProf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 为什么传统方法不够好
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 为什么传统方法不够好">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pte-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PTE-scan 的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hint-fault" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hint-fault 的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pmu-sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PMU sampling 的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-hot-page-detector-sketch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hot page detector：基于 Sketch 的检测器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-os-driver-daemon-migration-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. OS 侧配合：driver + daemon + migration policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-neomem-native" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. NeoMem 真正“native”的地方
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验与结果
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        这篇论文真正的贡献
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="这篇论文真正的贡献">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-memory-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 1：准确识别了 memory tiering 的真正瓶颈
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-device-side-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 2：提出了 device-side profiling 这一条新路径
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 3：让 profiling 更接近“真实慢层访问”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-cxl-memory-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        贡献 4：证明硬件/软件协同在 CXL memory management 上是可行的
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        局限与问题
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="局限与问题">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-hotness-first-costcriticality-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 它本质上还是 hotness-first，而不是 cost/criticality-first
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 需要设备侧硬件改造
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 对多样化工作负载是否足够稳，还需要更长时间验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-criticality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 它没有触及“criticality”这一层
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        和相关工作的关系
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="和相关工作的关系">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pte-scan-hint-fault-pmu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与传统 PTE-scan / hint-fault / PMU 方案相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#numa-style-memory-tiering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 NUMA-style memory tiering 相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        与 PACT 这类后续工作相比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对研究者的启发
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="对研究者的启发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1cxl-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 1：CXL 时代，设备侧 controller 不是被动部件
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 2：观测点决定优化上限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cxl-memory-numa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        启发 3：不要把 CXL memory 只当成“更慢的 NUMA”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        我的评价
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        适合继续追的问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#takeaway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Takeaway
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/Silverhza/edit/main/docs/papers/neomem-cxl-native-memory-tiering.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<hr />
+<p>title: NeoMem: Hardware/Software Co-Design for CXL-Native Memory Tiering
+authors: Zhe Zhou, Yiqi Chen, Tao Zhang, Yang Wang, Ran Shu, Shuotao Xu, Peng Cheng, Lei Qu, Yongqiang Xiong, Jie Zhang, Guangyu Sun
+year: 2024
+venue: MICRO 2024
+tags:
+  - CXL
+  - tiered memory
+  - memory profiling
+  - hardware-software co-design
+  - page migration
+status: published</p>
+<hr />
+<h1 id="neomem-hardwaresoftware-co-design-for-cxl-native-memory-tiering">NeoMem: Hardware/Software Co-Design for CXL-Native Memory Tiering<a class="headerlink" href="#neomem-hardwaresoftware-co-design-for-cxl-native-memory-tiering" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><a href="https://arxiv.org/abs/2403.18702">论文链接</a></p>
+</blockquote>
+<h2 id="_1">一句话总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>NeoMem 的核心贡献是把 <strong>分层内存中的热页检测从 CPU/OS 侧搬到 CXL 设备侧控制器</strong>，通过一个叫 <strong>NeoProf</strong> 的硬件 profiler 直接观测访问 CXL 内存的 LLC miss，从而绕开传统 PTE 扫描、hint-fault 和 PMU sampling 的分辨率/开销瓶颈，再配合内核侧迁移策略实现更高效的 CXL-native memory tiering。</p>
+<h2 id="_2">这篇论文在解决什么问题？<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>这篇论文要解决的是一个很现实的问题：<strong>在 CXL-based tiered memory system 中，怎样及时、准确、低开销地找到应该被提升到快内存的热页？</strong></p>
+<p>CXL 让服务器可以接入各种不同类型的内存，把系统变成“本地 DRAM + CXL memory”的异构分层内存结构。但一旦出现快慢层，系统就必须不断做 page migration：把真正关键的热页迁到快层，把冷页放回慢层。问题在于，现有 memory tiering 方案虽然已经很多，但真正限制它们上限的不是迁移机制本身，而是<strong>热页检测方法太差</strong>。</p>
+<p>传统方法大概分三类：</p>
+<ul>
+<li><strong>PTE Scan</strong>：扫页表 Access bit，开销高，而且一个扫描周期内每页只能看到“是否访问过一次”；</li>
+<li><strong>Hint-fault monitoring</strong>：通过故意 poisoning PTE 让后续访问触发 fault，分辨率更高，但 page fault 成本很大；</li>
+<li><strong>PMU/PEBS sampling</strong>：能看到 LLC miss，但只能低频采样，而且强依赖特定 CPU 平台。</li>
+</ul>
+<p>作者的判断很明确：<strong>CXL memory tiering 的真正瓶颈，是 OS/CPU 侧缺少高分辨率、低开销、cache-aware 的 memory profiling 手段。</strong></p>
+<p>所以 NeoMem 不是在旧方案上做一点 policy 调参，而是试图从 profiling 路径本身重构：既然 CXL memory 自带 device-side controller，那为什么不把 profiling 功能直接放到设备侧？</p>
+<h2 id="_3">背景 / 为什么这个问题重要？<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>CXL 出现后，服务器内存扩展的方式发生了变化。过去 CPU-attached DRAM 是主流，内存控制器嵌在主机一侧；而 CXL 让 memory expansion 变成了一种更松耦合的设备化能力。这样做的好处很明显：</p>
+<ul>
+<li>可以按容量、带宽、成本自由组合不同介质；</li>
+<li>可以更方便地扩展内存池；</li>
+<li>对 memory disaggregation、分层内存和异构内存组织都很有吸引力。</li>
+</ul>
+<p>但坏处同样明显：<strong>CXL memory 比本地 DRAM 慢得多。</strong> 论文在真实 FPGA-based CXL 平台上测到的数字是，大约 <strong>430ns</strong> 的访问延迟，约为本地 DRAM 的 <strong>3.6×</strong>。而且如果 CXL 设备进一步采用更慢的介质（比如 PCM/ReRAM），延迟差距还会更大。</p>
+<p>在这种前提下，内存管理最关键的一点就不再只是“扩了多少容量”，而是：</p>
+<blockquote>
+<p><strong>能否把真正高价值的页留在快层，把不重要的页留在慢层。</strong></p>
+</blockquote>
+<p>而要做到这一点，就必须有一个足够好的“热页观察窗口”。如果观察方法自己就低分辨率、高开销、或者只能看到 TLB 级现象而看不到真实 LLC miss，那么后面的迁移策略再精巧，也会建立在很差的输入上。</p>
+<p>这也是 NeoMem 这篇论文最重要的视角：<strong>memory tiering 的上限，往往由 profiling 能力决定。</strong></p>
+<h2 id="_4">核心思路<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>NeoMem 的整体设计可以概括成一句话：</p>
+<blockquote>
+<p><strong>把 memory profiling 从 CPU/OS 一侧下沉到 CXL memory device 的 controller 里。</strong></p>
+</blockquote>
+<p>具体来说，它是一个硬件/软件协同方案：</p>
+<ul>
+<li><strong>硬件侧</strong>：在 CXL device-side controller 中加入一个专门的 profiler，叫 <strong>NeoProf</strong>；</li>
+<li><strong>软件侧</strong>：Linux 内核里实现驱动、守护进程和迁移策略，让 OS 周期性读取 NeoProf 的统计结果，再用这些信息做热页提升和冷页回收。</li>
+</ul>
+<p>这个思路其实很“CXL-native”：它不是把 CXL memory 当成另一个更慢的 NUMA node 然后硬套传统方法，而是正视 CXL 设备“有自己控制器”这件事，并利用这个设备侧观察点来做 profiling。</p>
+<p>论文把理想 profiling 机制的目标归纳成五个：</p>
+<ol>
+<li>高时间/空间分辨率；</li>
+<li>低 CPU 开销；</li>
+<li>cache-aware，只看真正 LLC miss；</li>
+<li>跨 CPU 平台通用；</li>
+<li>不只看 page hotness，还能看带宽、读写比、频率分布等运行时信息。</li>
+</ol>
+<p>NeoMem 的设计就是围绕这五个目标展开的。</p>
+<h2 id="_5">关键机制 / 方法细节<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h3 id="1-profilerneoprof">1. 设备侧 profiler：NeoProf<a class="headerlink" href="#1-profilerneoprof" title="Permanent link">&para;</a></h3>
+<p>NeoProf 是整篇论文最核心的技术点。它被集成进 CXL memory 的 controller 里，直接 snoop 发往 CXL memory 的访问请求。这样做有几个很关键的好处：</p>
+<ul>
+<li><strong>它天然看到的是“真正落到 CXL memory 的访问”</strong>，也就是更接近 LLC miss 后的真实慢层访问；</li>
+<li>不需要 CPU 用额外 cycle 做 profiling；</li>
+<li>不依赖 Intel PEBS/AMD IBS 这类 vendor-specific PMU 机制；</li>
+<li>可以与 host CPU 解耦，只要平台支持 CXL，就能接入。</li>
+</ul>
+<p>NeoProf 不只是一个“热页计数器”，它还会顺手统计很多运行时信息：</p>
+<ul>
+<li>page hotness</li>
+<li>带宽利用率</li>
+<li>读/写比例</li>
+<li>访问频率分布</li>
+</ul>
+<p>这些都可以给 OS 侧的迁移 aggressiveness 提供依据。</p>
+<p>从体系结构角度看，这是 NeoMem 最值得注意的地方：它不是简单增强 page classifier，而是把 profiling 变成了 <strong>memory-side observability primitive</strong>。</p>
+<h3 id="2">2. 为什么传统方法不够好<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
+<p>作者对现有 profiling 路径做了比较系统的批评。</p>
+<h4 id="pte-scan">PTE-scan 的问题<a class="headerlink" href="#pte-scan" title="Permanent link">&para;</a></h4>
+<p>PTE 扫描最大的问题是：</p>
+<ul>
+<li>时间分辨率低；</li>
+<li>空间分辨率和开销之间必须做很差的 tradeoff；</li>
+<li>一次 epoch 里每页只能知道“被访问过没”，很难高精度识别访问频繁页。</li>
+</ul>
+<p>对大内存系统来说，光扫描 page table 本身就会消耗明显时间。你想提高分辨率，就得更频繁扫描；想降低开销，就得降低分辨率或只抽样一部分区域。</p>
+<h4 id="hint-fault">Hint-fault 的问题<a class="headerlink" href="#hint-fault" title="Permanent link">&para;</a></h4>
+<p>Hint-fault 的优点是响应更即时，但代价是：</p>
+<ul>
+<li>每次“探测”都要制造 fault；</li>
+<li>频繁 fault 带来的 CPU 开销非常显著；</li>
+<li>它追踪的是 PTE/TLB 级信号，并不一定等价于真正的慢层 LLC miss。</li>
+</ul>
+<h4 id="pmu-sampling">PMU sampling 的问题<a class="headerlink" href="#pmu-sampling" title="Permanent link">&para;</a></h4>
+<p>PEBS/PMU sampling 能直接看到 LLC miss，这一点比前两类强。但它的局限在于：</p>
+<ul>
+<li>为了控制开销，采样率不敢太高；</li>
+<li>采样频率一低，热页 recall 就会受损；</li>
+<li>还高度依赖具体 CPU 平台，通用性差。</li>
+</ul>
+<p>NeoMem 的设计基本可以理解成：<strong>把“低开销 + 高分辨率 + cache-aware + 跨平台”这几个传统上难以同时满足的目标，转移到设备侧来统一解决。</strong></p>
+<h3 id="3-hot-page-detector-sketch">3. Hot page detector：基于 Sketch 的检测器<a class="headerlink" href="#3-hot-page-detector-sketch" title="Permanent link">&para;</a></h3>
+<p>如果 NeoProf 真要监控所有 page 访问，另一个问题马上出现：怎么存这些统计？</p>
+<p>论文里举了一个很典型的 straw-man：如果你有一个 512GB CXL memory expander，以 4KB page 粒度算，大约有 <strong>1.28 亿个页</strong>。如果每页配一个 32-bit counter，单是计数器存储就要 <strong>512MB</strong>，完全不可接受。更别说每次访问都更新它们的带宽开销。</p>
+<p>所以 NeoProf 没有走 per-page exact counter 这条路，而是采用了 <strong>Count-Min Sketch</strong> 这种近似频率估计结构，并做了两类增强：</p>
+<ul>
+<li>用 hot page filtering 机制减少重复；</li>
+<li>用 error-bound control 控制检测误差。</li>
+</ul>
+<p>这一步的设计很关键，因为它体现了论文的工程成熟度：作者不是只说“把 profiling 搬到设备侧”，而是认真面对了设备侧最现实的问题——<strong>状态空间太大，不能精确存每页计数。</strong></p>
+<p>Sketch 方案本质上是在用少量硬件状态换一个近似但可用的 hot-page detector。对 memory tiering 来说，这是合理的，因为你并不需要每页的绝对精确计数，而是需要一个足够可靠、足够及时的 top hot pages 近似排序。</p>
+<h3 id="4-os-driver-daemon-migration-policy">4. OS 侧配合：driver + daemon + migration policy<a class="headerlink" href="#4-os-driver-daemon-migration-policy" title="Permanent link">&para;</a></h3>
+<p>硬件只负责 profiling，页迁移决策仍然在 OS 侧完成。NeoMem 在 Linux 内核里做了几件事：</p>
+<ul>
+<li>驱动通过 MMIO 与 NeoProf 通信；</li>
+<li>守护进程周期性读取 NeoProf 的统计结果；</li>
+<li>根据 policy 做 hot page promotion；</li>
+<li>冷页检测则继续借助 Linux 里成熟的 <strong>LRU 2Q</strong> 机制。</li>
+</ul>
+<p>这是一种很务实的分工：</p>
+<ul>
+<li><strong>热页检测</strong> 最难、最耗 CPU，就下沉到设备侧；</li>
+<li><strong>冷页回收</strong> 不需要同样高的检测精度，继续复用 OS 现有机制就够。</li>
+</ul>
+<p>这说明作者并没有为了“全都自己做”而重写一切，而是只把最痛的瓶颈剥离出来，这也是比较典型的系统论文里成熟的“最小重构”思路。</p>
+<h3 id="5-neomem-native">5. NeoMem 真正“native”的地方<a class="headerlink" href="#5-neomem-native" title="Permanent link">&para;</a></h3>
+<p>论文把 NeoMem 称为 <strong>CXL-native</strong>，我认为这个说法不是噱头，而是有技术含义的。</p>
+<p>很多 CXL memory 工作其实还是在把它当作“更慢的远端内存”，然后用传统 NUMA-tiering 手段去适配。但 NeoMem 不一样，它真正利用了 CXL 架构里一个以前不太被充分利用的特点：</p>
+<ul>
+<li>CXL memory 不像 DDR 那样完全由 host memory controller 统一支配；</li>
+<li>它天然有 <strong>device-side controller</strong>；</li>
+<li>既然如此，profiling、统计甚至更丰富的 memory-side management 功能，就有机会向设备侧演进。</li>
+</ul>
+<p>这让 NeoMem 不只是一个“更好的 hot-page detector”，而是一个关于 <strong>CXL memory observability should move to the device side</strong> 的体系结构主张。</p>
+<h2 id="_6">实验与结果<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>实验部分的一个亮点是：作者不是只做 NUMA 仿真或 trace replay，而是在 <strong>真实 FPGA-based CXL memory platform</strong> 上实现了 NeoMem，并结合 Linux kernel v6.3 做了原型验证。</p>
+<p>论文的核心结果包括：</p>
+<ul>
+<li>对比多种现有 memory tiering 方案；</li>
+<li>在 8 个代表性 benchmark 上测试；</li>
+<li>在真实平台上，NeoMem 取得了 <strong>32% 到 67% 的几何平均加速</strong>。</li>
+</ul>
+<p>这个幅度是很有说服力的，尤其考虑到这不是“给一个更快设备”带来的被动收益，而是 purely 来自更好的 profiling 和 migration decision。</p>
+<p>不过这里也要冷静一点解读：</p>
+<ul>
+<li>论文是在特定 FPGA-based CXL prototype 上完成的；</li>
+<li>这个 prototype 的 latency 本身比很多仿真假设更高（作者测到约 430ns）；</li>
+<li>所以 NeoMem 在这种“慢层更慢”的情况下，收益会相对更容易放大。</li>
+</ul>
+<p>换句话说，它的结果是强的，但你不能简单把这个数字一比一外推到所有未来 CXL 平台。</p>
+<h2 id="_7">这篇论文真正的贡献<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>我认为 NeoMem 的贡献主要有四层。</p>
+<h3 id="1-memory-tiering">贡献 1：准确识别了 memory tiering 的真正瓶颈<a class="headerlink" href="#1-memory-tiering" title="Permanent link">&para;</a></h3>
+<p>很多人会把问题表述成“page migration policy 不够聪明”，但 NeoMem 更进一步指出：</p>
+<blockquote>
+<p><strong>真正决定 policy 上限的是 profiling 路径。</strong></p>
+</blockquote>
+<p>如果热页检测本身就低分辨率、高开销、观测信号又不对，那么后面的策略改再多也救不回来。这是非常重要的重新定位。</p>
+<h3 id="2-device-side-profiling">贡献 2：提出了 device-side profiling 这一条新路径<a class="headerlink" href="#2-device-side-profiling" title="Permanent link">&para;</a></h3>
+<p>NeoMem 把 profiling 移到 CXL controller 侧，这是这篇工作最有原创性的地方。它体现了一种很重要的系统设计思路：</p>
+<ul>
+<li>不是一味在 OS 里优化；</li>
+<li>而是利用新硬件架构带来的新观察点，重构软件设计。</li>
+</ul>
+<h3 id="3-profiling">贡献 3：让 profiling 更接近“真实慢层访问”<a class="headerlink" href="#3-profiling" title="Permanent link">&para;</a></h3>
+<p>PTE/TLB 级信号和真正的 LLC miss / CXL access 之间有语义鸿沟。NeoMem 的一大价值就在于缩短了这个鸿沟：NeoProf 看到的是更接近真实慢层访问的请求，从而让 page classification 更可靠。</p>
+<h3 id="4-cxl-memory-management">贡献 4：证明硬件/软件协同在 CXL memory management 上是可行的<a class="headerlink" href="#4-cxl-memory-management" title="Permanent link">&para;</a></h3>
+<p>NeoMem 的成果告诉我们，CXL 场景下值得认真考虑的不是“CPU 侧如何继续做所有事情”，而是：</p>
+<ul>
+<li>哪些管理功能应该继续留在 OS；</li>
+<li>哪些观察与统计功能更适合下沉到设备控制器。</li>
+</ul>
+<p>这对未来 CXL-native 系统软件是很有启发的。</p>
+<h2 id="_8">局限与问题<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>这篇论文很强，但也有明显边界。</p>
+<h3 id="1-hotness-first-costcriticality-first">1. 它本质上还是 hotness-first，而不是 cost/criticality-first<a class="headerlink" href="#1-hotness-first-costcriticality-first" title="Permanent link">&para;</a></h3>
+<p>这是我认为 NeoMem 和后来的 PACT 最大的差异之一。</p>
+<p>NeoMem 的核心还是高效地检测“热页”，然后促进热页提升。虽然它把 profiling 做得很好，但其决策核心仍然主要基于 <strong>frequency / hotness</strong>。它确实把“看得准”这件事做强了，但并没有彻底跳到“性能关键性 first”的范式。</p>
+<p>这意味着：</p>
+<ul>
+<li>NeoMem 更像 hotness-based tiering 的强化版；</li>
+<li>而不是像 PACT 那样直接重写目标函数。</li>
+</ul>
+<h3 id="2_1">2. 需要设备侧硬件改造<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h3>
+<p>NeoProf 不是零成本能力，它需要：</p>
+<ul>
+<li>CXL device-side controller 可编程/可扩展；</li>
+<li>接入额外硬件逻辑；</li>
+<li>有 MMIO 命令接口与 host 交互。</li>
+</ul>
+<p>这在研究原型里合理，但在商用生态里，意味着硬件厂商和系统软件要一起配合，落地门槛并不低。</p>
+<h3 id="3">3. 对多样化工作负载是否足够稳，还需要更长时间验证<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<p>NeoMem 用了 8 个 benchmark，已经不差，但如果放到更复杂的真实数据中心环境里，还要继续看：</p>
+<ul>
+<li>多租户情况下的热度波动；</li>
+<li>更大页/hugepage 场景；</li>
+<li>与 NUMA balancing、OS reclaim 等机制的交互；</li>
+<li>长时间运行下的误差积累与 policy 稳定性。</li>
+</ul>
+<h3 id="4-criticality">4. 它没有触及“criticality”这一层<a class="headerlink" href="#4-criticality" title="Permanent link">&para;</a></h3>
+<p>这不是说 NeoMem 不好，而是说它解决的是“高分辨率热页检测”，还没有解决“哪些热页真的最影响性能”这个更进一步的问题。所以如果把 NeoMem 和 PACT 放在一条线上看，NeoMem 更像是在 profiling 能力上开路，而 PACT 则在目标函数层面继续推进。</p>
+<h2 id="_9">和相关工作的关系<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h3 id="pte-scan-hint-fault-pmu">与传统 PTE-scan / hint-fault / PMU 方案相比<a class="headerlink" href="#pte-scan-hint-fault-pmu" title="Permanent link">&para;</a></h3>
+<p>NeoMem 的优势很明确：</p>
+<ul>
+<li>更高分辨率；</li>
+<li>更低 CPU 开销；</li>
+<li>更接近真实 LLC miss；</li>
+<li>更不依赖某个 CPU vendor 的 profiling 能力。</li>
+</ul>
+<h3 id="numa-style-memory-tiering">与 NUMA-style memory tiering 相比<a class="headerlink" href="#numa-style-memory-tiering" title="Permanent link">&para;</a></h3>
+<p>传统 NUMA-tiering 方案基本还是 host-centric 的。NeoMem 则证明了，到了 CXL 时代，<strong>memory-side management</strong> 值得成为一个新的研究方向。</p>
+<h3 id="pact">与 PACT 这类后续工作相比<a class="headerlink" href="#pact" title="Permanent link">&para;</a></h3>
+<p>如果把两者放一起看，会很有意思：</p>
+<ul>
+<li><strong>NeoMem</strong>：先把 profiling 做对、做细、做低开销；</li>
+<li><strong>PACT</strong>：再进一步质疑“hotness 是否足够”，转向 criticality-first。</li>
+</ul>
+<p>所以我会把 NeoMem 看成是一个重要台阶：它先解决“怎么观察”，然后后续工作才有空间去讨论“观察到以后该优化什么”。</p>
+<h2 id="_10">对研究者的启发<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h3 id="1cxl-controller">启发 1：CXL 时代，设备侧 controller 不是被动部件<a class="headerlink" href="#1cxl-controller" title="Permanent link">&para;</a></h3>
+<p>NeoMem 最重要的研究启发之一，是把 CXL device-side controller 从“协议执行器”提升成“系统软件协同点”。未来不仅 profiling，也许 prefetch、compression、integrity metadata management、甚至部分 placement hint 都可以往这一侧延伸。</p>
+<h3 id="2_2">启发 2：观测点决定优化上限<a class="headerlink" href="#2_2" title="Permanent link">&para;</a></h3>
+<p>如果你只能从 OS 页表侧看世界，那你就很难精准控制 CXL tiering。NeoMem 提醒我们：<strong>在系统设计里，观测点本身就是一等资源。</strong></p>
+<h3 id="3-cxl-memory-numa">启发 3：不要把 CXL memory 只当成“更慢的 NUMA”<a class="headerlink" href="#3-cxl-memory-numa" title="Permanent link">&para;</a></h3>
+<p>如果只是这么理解，很多设计空间都会被忽略。CXL 带来的新控制器、新协议层和新设备边界，本身就是新的优化机会。</p>
+<h2 id="_11">我的评价<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<p>我对 NeoMem 的评价是：<strong>这是一篇方向感很强、工程味也很足的 CXL tiering 论文。</strong></p>
+<p>它最强的地方不在于提出了一个花哨的策略，而在于它很扎实地识别出：</p>
+<ul>
+<li>memory tiering 的输入观测层本身已经成了瓶颈；</li>
+<li>继续围绕 CPU/OS 侧做 profiling 小修小补，很难再有根本性提升；</li>
+<li>设备侧 profiling 才是 CXL-native 方案真正值得探索的方向。</li>
+</ul>
+<p>如果要说它的不足，我会认为它还停留在 <strong>hotness-first</strong> 范式里，没有进一步回答“热页里谁更关键”这个问题。但这不影响它作为一篇 <strong>CXL memory management 方向很值得读的工作</strong> 的价值。</p>
+<h2 id="_12">适合继续追的问题<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<ol>
+<li>如果把 NeoProf 的 profiling 信息与 <strong>criticality model</strong> 结合，会不会比单纯 hotness 更强？</li>
+<li>NeoProf 这类 device-side profiler 是否可以扩展到：</li>
+<li>带宽拥塞感知</li>
+<li>prefetch feedback</li>
+<li>访问模式分类</li>
+<li>安全/完整性元数据观察？</li>
+<li>NeoMem 的设计在多租户和 memory pooling 场景中如何演化？</li>
+<li>如果未来 CXL memory 不只是“慢层”，而是包含多类设备，NeoProf 的统计抽象是否仍然足够？</li>
+<li>在真实商用 CXL 设备里，硬件厂商是否愿意提供这样的 profiling primitive？</li>
+</ol>
+<h2 id="takeaway">Takeaway<a class="headerlink" href="#takeaway" title="Permanent link">&para;</a></h2>
+<p>NeoMem 最重要的意义，不只是又做出了一个更快的 page migration policy，而是把 CXL memory tiering 的观察点从 CPU/OS 侧移到了设备控制器侧，证明了 <strong>device-side profiling</strong> 能成为 CXL-native memory management 的关键能力。即便它仍属于 hotness-first 路线，这篇论文依然是理解“为什么 CXL 时代的 tiering 需要硬件/软件协同”时非常值得读的一篇代表性工作。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.sections", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
