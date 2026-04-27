@@ -67,6 +67,7 @@ nav:
   - 首页: index.md
   - 论文总结:
       - papers/index.md
+      - NeoMem：面向 CXL 原生分层内存的软硬件协同设计: papers/neomem-cxl-native-memory-tiering.md
       - PACT：以性能关键性为核心的分层内存设计: papers/pact-tiered-memory-criticality.md
       - Space-Control：CXL 共享解耦内存中的进程级隔离: papers/space-control-cxl-isolation.md
       - AIORE：CXL Memory 安全支持: papers/aiore-cxl-security/index.md
